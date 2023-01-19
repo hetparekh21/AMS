@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
 use App\Models\classes;
 use App\Models\att_jsons;
 use App\Models\students;
@@ -18,17 +21,14 @@ class teacher extends Controller
 
     public function teacher_class()
     {
-        // get all the classes for this teacher
-        $classes = classes::join('subjects', 'classes.subject_id', '=', 'subjects.subject_id')->
-        join('semesters', 'semesters.semester_id', '=', 'subjects.semester_id')->
-        join('sub_tech', 'subjects.subject_id', '=', 'sub_tech.subject_id')->
-        join('teachers', 'teachers.teacher_id', '=', 'sub_tech.teacher_id')->orderby('classes.date','desc')->
-        get(['classes.class_id', 'classes.class_code', 'subjects.subject_name', 'classes.date', 'semesters.semester_name'])->
-        toArray();
 
-        // echo '<pre>';
-        // print_r($classes);
-        // die;
+        $teacher = Auth::user(); 
+
+        $resuest = Request::create(route('get.classes',$teacher->id),'GET');
+        $response = Route::dispatch($resuest);
+
+        $classes = json_decode($response->getContent(),true);
+        
         return view('teacher/teacher_class', compact('classes'));
     }
 

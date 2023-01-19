@@ -11,10 +11,9 @@
 
 @include('header')
 
-<?php 
-echo "<script>window.open('www.google.com', '_blank')</script>"
-?>
-
+@if(session()->has('qr'))
+<script>window.open('{{route('qr',session()->get('qr'))}}', '_blank')</script>
+@endif
 
 
 <div class="container-xxl flex-grow-1 container-p-y">
