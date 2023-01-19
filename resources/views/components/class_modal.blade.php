@@ -18,7 +18,7 @@
           <div class="row">
             <div class="col mb-3">
               <label for="nameBasic" class="form-label">Course</label>
-                <select class="form-control" name="course_{{$name}}" id="course" required>
+                <select class="form-control" name="course_{{$name}}" onchange="get_semester('{{$name}}')" id="course_{{$name}}" required>
                   <option selected disabled>Select</option>
                 </select>
                 <span class="text-danger">
@@ -33,7 +33,7 @@
           <div class="row">
             <div class="col mb-3">
               <label for="nameBasic" class="form-label">Semester</label>
-                <select class="form-control" name="semester_{{$name}}" id="sem" disabled required>
+                <select class="form-control" name="semester_{{$name}}" onchange="get_subject('{{$name}}')" id="sem_{{$name}}" disabled required>
                    <option selected disabled>Select</option>
                 </select>
                 <span class="text-danger">
@@ -48,7 +48,7 @@
           <div class="row">
             <div class="col mb-3">
               <label for="nameBasic" class="form-label">Subject</label>
-                <select class="form-control" name="subject_{{$name}}" id="sub" disabled required>
+                <select class="form-control" name="subject_{{$name}}" id="sub_{{$name}}" disabled required>
                    <option selected disabled>Select</option>
                 </select>
                 <span class="text-danger">

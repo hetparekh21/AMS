@@ -82,6 +82,22 @@ class teacher extends Controller
 
         return redirect()->route('teacher.class');
     }
+
+    public function create_template(Request $req){
+
+        $req->validate([
+            'course_template' => 'required',
+            'semester_template' => 'required',
+            'subject_template' => 'required'
+        ]);
+
+        // get course , semester and subject
+        $course = $_POST['course_template'];
+        $semester = $_POST['semester_template'];
+        $subject = $_POST['subject_template'];
+
+    }
+
 }
 
 function get_clean_json($json_objs)

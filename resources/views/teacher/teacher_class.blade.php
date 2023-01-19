@@ -22,11 +22,11 @@
 
       <div class="col-12 col-lg-8 order-2 mb-4" >
 
-        <button type="button" class="btn rounded-pill btn-outline-primary" id="class" onclick="get_course()" data-bs-toggle="modal" data-bs-target="#class_modal">
+        <button type="button" class="btn rounded-pill btn-outline-primary" id="class" onclick="get_course(this.id)" data-bs-toggle="modal" data-bs-target="#class_modal">
           <span class="tf-icons bx bx-plus" ></span>&nbsp;Class
         </button>
         
-        <button type="button" class="btn rounded-pill btn-outline-secondary" id="template" onclick="get_course()" data-bs-toggle="modal" data-bs-target="#template_modal">
+        <button type="button" class="btn rounded-pill btn-outline-secondary" id="template" onclick="get_course(this.id)" data-bs-toggle="modal" data-bs-target="#template_modal">
           <span class="tf-icons bx bx-plus"></span>&nbsp;Template
         </button>
 
@@ -161,7 +161,7 @@
 @include('footer')
 
 <x-class_modal title="Class" action="{{route('teacher.initiate.class')}}" button="Initiate Class" modalname="class_modal" name="class"/>
-<x-class_modal title="Template" action="" button="Create Template" modalname="template_modal" name="template"/>
+<x-class_modal title="Template" action="{{route('teacher.create.template')}}" button="Create Template" modalname="template_modal" name="template"/>
 {{-- <script>
 
   // @isset($qr)
@@ -193,22 +193,22 @@
       return option;
     }
 
-  function reset(){
-      $('#course option').remove();
-      $("#course").append(get_option());
+  function reset(id){
+      $('#course_'+id+' option').remove();
+      $("#course_"+id).append(get_option());
     
-      $('#sub option').remove();
-      $("#sub").append(get_option());
-      $('#sub').prop('disabled',true)
+      $('#sub_'+id+' option').remove();
+      $("#sub_"+id).append(get_option());
+      $('#sub_'+id).prop('disabled',true)
     
-      $('#sem option').remove();
-      $("#sem").append(get_option());
-      $('#sem').prop('disabled',true)
+      $('#sem_'+id+'option').remove();
+      $("#sem_"+id).append(get_option());
+      $('#sem_'+id).prop('disabled',true)
     }
 
-  function get_course() {
+  function get_course(id) {
     
-    reset();
+    reset(id);
   
     $.ajax({
       url: "{{route('get.course')}}",
@@ -217,92 +217,82 @@
       success: function(data) {
         console.log(data);
         // remove all options from the course select element
-        $('#course option').remove();
+        $('#course_'+id+' option').remove();
         // make options and add them in the course select element
         for (var i = 0; i < data.length; i++) {
           var option = document.createElement('option');
           option.value = data[i]['course_id'];
           option.innerHTML = data[i]['course_name'];
-          $("#course").append(option);
+          $("#course_"+id).append(option);
         }
         
-        $("#course").append(get_option());
+        $("#course_"+id).append(get_option());
       }
     });
   }
 
-  // $('#class').click();
-  // $('#template').click(get_course());
-
-  $(document).ready(function() {
-
-    // use ajax to fill the semester select
-    $('#course').change(function() {
-    
-      $('#sub option').remove();
-      $("#sub").append(get_option());
-      $('#sub').prop('disabled',true)
-    
-      $('#sem option').remove();
-      $("#sem").append(get_option());
-      $('#sem').prop('disabled',true);
-    
-      var course_id = $(this).val();
-      console.log(course_id);
-      $.ajax({
-        url: "{{route('get.semester')}}",
-        method: "post",
-        data: {course_id: course_id,user_id:{{Auth::user()->id}}},
-        success: function(data) {
-          console.log(data);
-          $('#sem option').remove();
-          // make options and add them in the semester select element
-          if(data.length > 0){
-            for (var i = 0; i < data.length; i++) {
-              var option = document.createElement('option');
-              option.value = data[i]['semester_id'];
-              option.innerHTML = data[i]['semester_name'];
-              $("#sem").append(option);
-            }
-            $("#sem").append(get_option());
-            $('#sem').prop('disabled', false);
-          }
-        }
-      });
-    });
+  function get_semester(id){
+    $('#sub_'+id+' option').remove();
+    $("#sub_"+id).append(get_option());
+    $('#sub_'+id).prop('disabled',true)
   
-    // use ajax to fill the subject select
-    $('#sem').change(function() {
-      var semester_id = $(this).val();
-      var course_id = $("#course").val();
-      console.log(semester_id);
-      $.ajax({
-        url: "{{route('get.subjects')}}",
-        method: "post",
-        data: {course_id:course_id,semester_id: semester_id,user_id:{{Auth::user()->id}}},
-        success: function(data) {
-          console.log(data);
-          $('#sub option').remove();
-          // make options and add them in the subject select element
-          if(data.length > 0){
-            for (var i = 0; i < data.length; i++) {
-              var option = document.createElement('option');
-              option.value = data[i]['subject_id'];
-              option.innerHTML = data[i]['subject_name'];
-              $("#sub").append(option);
-            }
-            $("#sub").append(get_option());
-            $('#sub').prop('disabled', false);
-          }else{
+    $('#sem_'+id+' option').remove();
+    // $("#sem_"+id).append(get_option());
+    // $('#sem_'+id).prop('disabled',true);
+    
+    var course_id = $('#course_'+id).val();
+    console.log(course_id);
+    $.ajax({
+      url: "{{route('get.semester')}}",
+      method: "post",
+      data: {course_id: course_id,user_id:{{Auth::user()->id}}},
+      success: function(data) {
+        console.log(data);
+        $('#sem option').remove();
+        // make options and add them in the semester select element
+        if(data.length > 0){
+          for (var i = 0; i < data.length; i++) {
+            var option = document.createElement('option');
+            option.value = data[i]['semester_id'];
+            option.innerHTML = data[i]['semester_name'];
+            $("#sem_"+id).append(option);
+          }
+          $("#sem_"+id).append(get_option());
+          $('#sem_'+id).prop('disabled', false);
+        }
+      }
+      });
+  }
+
+  function get_subject(id){
+    var semester_id = $('#sem_'+id).val();
+    var course_id = $("#course_"+id).val();
+    console.log(semester_id);
+    $.ajax({
+      url: "{{route('get.subjects')}}",
+      method: "post",
+      data: {course_id:course_id,semester_id: semester_id,user_id:{{Auth::user()->id}}},
+      success: function(data) {
+        console.log(data);
+        $('#sub_'+id+' option').remove();
+        // make options and add them in the subject select element
+        if(data.length > 0){
+          for (var i = 0; i < data.length; i++) {
+            var option = document.createElement('option');
+            option.value = data[i]['subject_id'];
+            option.innerHTML = data[i]['subject_name'];
+            $("#sub_"+id).append(option);
+          }
+          $("#sub_"+id).append(get_option());
+          $('#sub_'+id).prop('disabled', false);
+        }else{
             var option = document.createElement('option');
             option.value = '';
             option.innerHTML = 'No Subjects available in this Semester';
             $("#sub").append(option);
           }
-        }
+      }
       });
-    });
-  
-  });
+  }
   
 </script>

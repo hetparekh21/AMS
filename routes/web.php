@@ -8,7 +8,6 @@ use App\Http\Controllers\student;
 use App\Http\Controllers\admin;
 use App\Http\Controllers\login;
 use App\Http\Controllers\class_attendance;
-use App\Models\classes;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +61,8 @@ Route::middleware('guard_teacher')->group(function () {
         Route::get('/{id}', [class_attendance::class, 'index'])->name('attendance');
 
         Route::post('/initiate',[teacher::class,'initiate_class'])->name('teacher.initiate.class');
+
+        Route::post('/create_template', [teacher::class, 'create_template'])->name('teacher.create.template');
 
     });
 });
