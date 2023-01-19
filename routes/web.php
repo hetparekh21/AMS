@@ -64,6 +64,8 @@ Route::middleware('guard_teacher')->group(function () {
 
         Route::post('/create_template', [teacher::class, 'create_template'])->name('teacher.create.template');
 
+        Route::post('/handel_template/{id}', [teacher::class, 'handel_template'])->name('teacher.handel.template');
+
     });
 });
 

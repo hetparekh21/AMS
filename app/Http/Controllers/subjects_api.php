@@ -10,9 +10,9 @@ class subjects_api extends Controller
     
     public function get_subjects()
     {
-        $user_id = $_POST['user_id'];
-        $course_id = $_POST['course_id'];
-        $semester_id = $_POST['semester_id'];
+        $user_id = $_GET['user_id'];
+        $course_id = $_GET['course_id'];
+        $semester_id = $_GET['semester_id'];
 
         $subjects = subjects::join('semesters', 'semesters.semester_id', '=', 'subjects.semester_id')
             ->join('courses', 'courses.course_id', '=', 'subjects.course_id')

@@ -1,40 +1,36 @@
 <?php
 
+/**
+ * Created by Reliese Model.
+ */
+
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property integer $role_id
+ * Class Role
+ * 
+ * @property int $role_id
  * @property string $role_name
- * @property User[] $users
+ * 
+ * @property Collection|User[] $users
+ *
+ * @package App\Models
  */
-class role extends Model
+class Role extends Model
 {
-    /**
-     * The table associated with the model.
-     * 
-     * @var string
-     */
-    protected $table = 'role';
+	protected $table = 'role';
+	protected $primaryKey = 'role_id';
+	public $timestamps = false;
 
-    /**
-     * The primary key for the model.
-     * 
-     * @var string
-     */
-    protected $primaryKey = 'role_id';
+	protected $fillable = [
+		'role_name'
+	];
 
-    /**
-     * @var array
-     */
-    protected $fillable = ['role_name'];
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function users()
-    {
-        return $this->hasMany('App\Models\User', null, 'role_id');
-    }
+	public function users()
+	{
+		return $this->hasMany(User::class);
+	}
 }

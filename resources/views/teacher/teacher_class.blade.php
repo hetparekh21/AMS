@@ -98,56 +98,29 @@
               <h5 class="card-header">Templates</h5>
               <div class="card-body" id="vertical-example">
                 
-                <div class="card shadow-none bg-transparent border border-secondary mb-3">
-                  <div class="card-body">
-                    <h5 class="card-title">Advanced Java Programming</h5>
-                    <div class="card-text">
-                      <p>Course : Software Development<br>
-                        Semester : Sem 3
-                      </p>
-                    </div>
-                    <div class="row" >
-                      <div class="col" >
-                        <button type="button" class="btn rounded-pill btn-primary">Initiate</button>
-                        <button type="button" class="btn rounded-pill btn-outline-danger">Delete</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                @foreach ($templates as $data)
 
-                <div class="card shadow-none bg-transparent border border-secondary mb-3">
-                  <div class="card-body">
-                    <h5 class="card-title">Database Administration</h5>
-                    <div class="card-text">
-                      <p>Course : Software Development<br>
-                        Semester : Sem 3
-                      </p>
-                    </div>
-                    <div class="row" >
-                      <div class="col" >
-                        <button type="button" class="btn rounded-pill btn-primary">Initiate</button>
-                        <button type="button" class="btn rounded-pill btn-outline-danger">Delete</button>
+                  <div class="card shadow-none bg-transparent border border-secondary mb-3">
+                    <div class="card-body">
+                      <h5 class="card-title">{{$data['subject_name']}}</h5>
+                      <div class="card-text">
+                        <p>Course : {{$data['course_name']}}<br>
+                          Semester : {{$data['semester_name']}}
+                        </p>
+                      </div>
+                      <div class="row" >
+                        <div class="col" >
+                          <form action="{{route('teacher.handel.template',$data['id'])}}" method="POST">
+                            @csrf
+                            <input type="submit" class="btn rounded-pill btn-primary" name="action" value="Initiate" />
+                            <input type="submit" class="btn rounded-pill btn-outline-danger" name="action" value="Delete" />
+                          </form>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div class="card shadow-none bg-transparent border border-secondary mb-3">
-                  <div class="card-body">
-                    <h5 class="card-title">Programming Using Python - II</h5>
-                    <div class="card-text">
-                      <p>Course : Software Development<br>
-                        Semester : Sem 4
-                      </p>
-                    </div>
-                    <div class="row" >
-                      <div class="col" >
-                        <button type="button" class="btn rounded-pill btn-primary">Initiate</button>
-                        <button type="button" class="btn rounded-pill btn-outline-danger">Delete</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                @endforeach
 
               </div>
             </div>
@@ -212,7 +185,7 @@
   
     $.ajax({
       url: "{{route('get.course')}}",
-      method: "post",
+      method: "get",
       data: {user_id:{{Auth::user()->id}}},
       success: function(data) {
         console.log(data);
@@ -244,7 +217,7 @@
     console.log(course_id);
     $.ajax({
       url: "{{route('get.semester')}}",
-      method: "post",
+      method: "get",
       data: {course_id: course_id,user_id:{{Auth::user()->id}}},
       success: function(data) {
         console.log(data);
@@ -270,7 +243,7 @@
     console.log(semester_id);
     $.ajax({
       url: "{{route('get.subjects')}}",
-      method: "post",
+      method: "get",
       data: {course_id:course_id,semester_id: semester_id,user_id:{{Auth::user()->id}}},
       success: function(data) {
         console.log(data);

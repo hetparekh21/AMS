@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 use App\Models\classes;
 use App\Models\att_jsons;
 use App\Models\students;
+use App\Models\templates;
+use App\Models\teachers;
 
 class teacher extends Controller
 {
@@ -22,14 +24,20 @@ class teacher extends Controller
     public function teacher_class()
     {
 
+        // get classes 
         $teacher = Auth::user(); 
-
-        $resuest = Request::create(route('get.classes',$teacher->id),'GET');
+        $resuest = Request::create(route('get.classes',$teacher->id),'get');
         $response = Route::dispatch($resuest);
 
         $classes = json_decode($response->getContent(),true);
         
-        return view('teacher/teacher_class', compact('classes'));
+        // get templates
+        $resuest = Request::create(route('get.templates',$teacher->id),'get');
+        $response = Route::dispatch($resuest);
+
+        $templates = json_decode($response->getContent(),true);
+
+        return view('teacher/teacher_class', compact('classes','templates'));
     }
 
     public function teacher_account_settings()
@@ -83,6 +91,8 @@ class teacher extends Controller
         return redirect()->route('teacher.class');
     }
 
+    // template handling
+
     public function create_template(Request $req){
 
         $req->validate([
@@ -91,11 +101,70 @@ class teacher extends Controller
             'subject_template' => 'required'
         ]);
 
+        $teacher = Auth::user(); 
+
         // get course , semester and subject
+        $teacher_id = teachers::where('uid', $teacher->id)->get('teacher_id');
         $course = $_POST['course_template'];
         $semester = $_POST['semester_template'];
         $subject = $_POST['subject_template'];
 
+        // insert into templates
+
+
+        $template = new templates;
+        $template->teacher_id = $teacher_id[0]['teacher_id'];
+        $template->course_id = $course;
+        $template->semester_id = $semester;
+        $template->subject_id = $subject;
+        $template->save();
+
+        return redirect()->route('teacher.class');
+
+    }
+
+    public function handel_template($id){
+
+        if($_POST['action'] == 'Delete'){
+
+            templates::where('id', $id)->delete();
+
+        }elseif($_POST['action'] == 'Initiate'){
+
+            $template = templates::where('id', $id)->get()->toArray();
+
+            // insert into class
+            $class_code = get_unique_code();
+
+            $class = new classes;
+            $class->subject_id = $template[0]['subject_id'];
+            $class->class_code = $class_code;
+            $class->save();
+
+            $class_id = classes::where('class_code', $class_code)->get('class_id')->toArray();
+
+            // get all the students for this course and semester
+
+            $json_objs = Students::where('course_id', $template[0]['course_id'])
+                ->where('semester_id', $template[0]['semester_id'])
+                ->selectRaw('JSON_OBJECT(student_id, 0) as json_objs')
+                ->get()->toArray();
+
+            $encoded = get_clean_json($json_objs);
+
+            // echo $encoded;
+
+            // insert into att_json
+            $att_json = new att_jsons;
+            $att_json->class_id = $class_id[0]['class_id'];
+            $att_json->att_json = ($encoded == '' ? '{}' : $encoded);
+            $att_json->save();
+
+            session()->flash('qr', $class_code);
+
+        }
+
+        return redirect()->route('teacher.class');
     }
 
 }

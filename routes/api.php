@@ -7,6 +7,7 @@ use App\Http\Controllers\courses_api ;
 use App\Http\Controllers\semesters_api ;
 use App\Http\Controllers\subjects_api ;
 use App\Http\Controllers\classes_api ;
+use App\Http\Controllers\templates_api ;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,16 +26,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // class related
 
-Route::any('/get_classes/{uid}', [classes_api::class,'get_classes'])->name('get.classes');
+Route::get('/get_classes/{uid}', [classes_api::class,'get_classes'])->name('get.classes');
+
+// template related
+
+Route::get('/get_templates/{uid}',[templates_api::class,'get_templates'])->name('get.templates');
 
 // course related
 
-Route::any('/get_course', [courses_api::class,'get_courses'])->name('get.course');
+Route::get('/get_course', [courses_api::class,'get_courses'])->name('get.course');
 
 // semester related
 
-Route::any('/get_semester',[semesters_api::class,'get_semester'])->name('get.semester');
+Route::get('/get_semester',[semesters_api::class,'get_semester'])->name('get.semester');
 
 // subject related
 
-Route::any('/get_subjects',[subjects_api::class,'get_subjects'])->name('get.subjects');
+Route::get('/get_subjects',[subjects_api::class,'get_subjects'])->name('get.subjects');

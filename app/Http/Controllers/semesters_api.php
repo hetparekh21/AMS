@@ -11,8 +11,8 @@ class semesters_api extends Controller
 
     public function get_semester()
     {
-        $user_id = $_POST['user_id'];
-        $course_id = $_POST['course_id'];
+        $user_id = $_GET['user_id'];
+        $course_id = $_GET['course_id'];
 
         $teacher_id = teachers::where('uid', $user_id)->first();
 

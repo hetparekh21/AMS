@@ -11,7 +11,7 @@ class courses_api extends Controller
 
     public function get_courses()
     {
-        $user_id = $_POST['user_id'];
+        $user_id = $_GET['user_id'];
 
         $courses  = courses::join('subjects', 'subjects.course_id', '=', 'courses.course_id')
             ->join('sub_tech', 'subjects.subject_id', '=', 'sub_tech.subject_id')
