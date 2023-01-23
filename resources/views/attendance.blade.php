@@ -1,3 +1,6 @@
+@extends('layouts.content')
+
+@section('nav-components')
 @push('title')
     <title>Attendance</title>
 @endpush
@@ -9,8 +12,5 @@
     {{-- <x-menu_item link="{{route('attendance')}}" name="Attendance" icon="bx-calendar" active="active" /> --}}
 @endpush
 
-@include('header')
+@endsection
 
-
-
-@include('footer')

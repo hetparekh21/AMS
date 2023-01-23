@@ -8,6 +8,7 @@ use App\Http\Controllers\student;
 use App\Http\Controllers\admin;
 use App\Http\Controllers\login;
 use App\Http\Controllers\class_attendance;
+use App\Http\Controllers\attendance;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,8 +21,11 @@ use App\Http\Controllers\class_attendance;
 |
 */
 
-// Show Qr Code
+// Attendance Routes
 
+Route::get('/class_attendance/{class_id}',[attendance::class,'class_attendance'])->name('attendance.class');
+
+// Show Qr Code
 Route::get('/qr/{code}', function ($code) {
     // flash some data to session
     session()->flash('message', 'some route for students'.$code);
@@ -30,7 +34,6 @@ Route::get('/qr/{code}', function ($code) {
 
 
 // Admin Routes
-
 Route::middleware('guard_admin')->group(function () {
 
     Route::group(['prefix' => '/admin'], function () {
@@ -47,6 +50,7 @@ Route::middleware('guard_student')->group(function () {
         Route::get('/', [student::class, 'student_dashboard'])->name('student.dashboard')->middleware('auth');
     });
 });
+
 // Teacher Routes 
 Route::middleware('guard_teacher')->group(function () {
 
@@ -70,7 +74,6 @@ Route::middleware('guard_teacher')->group(function () {
 });
 
 // Login Logout 
-
 Route::get('/', function () {
     return redirect()->route('login.index');
 });
@@ -85,14 +88,4 @@ Route::group(['prefix' => 'login'], function () {
     Route::get('/', [login::class, 'index'])->name('login.index');
 
     Route::post('/', [login::class, 'login'])->name('login.login');
-});
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified'
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
 });

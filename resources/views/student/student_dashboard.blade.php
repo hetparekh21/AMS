@@ -1,3 +1,6 @@
+@extends('layouts.content')
+
+@section('nav-components')
 @push('title')
     <title>Student Dashboard</title>
 @endpush
@@ -7,7 +10,4 @@
     <x-menu_item link="{{route('logout')}}" name="Logout" icon="bx-log-out or power-off" active="" />
 @endpush
 
-@include('header')
-
-
-@include('footer')
+@endsection

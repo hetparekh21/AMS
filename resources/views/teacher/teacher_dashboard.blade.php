@@ -1,3 +1,6 @@
+@extends('layouts.content')
+
+@section('nav-components')
 
 @push('title')
     <title>Teacher Dashboard</title>
@@ -6,15 +9,14 @@
 @push('menu-items')
     <x-menu_item link="{{route('teacher.dashboard')}}" name="Dashboard" icon="bx-home-circle" active="active" />
     <x-menu_item link="{{route('teacher.class')}}" name="Class" icon="bx-book-open" active="" />
+    <x-menu_item link="" name="Attendance" icon="bx-edit-alt me-1" active="" />
     <x-menu_item link="{{route('teacher.account')}}" name="Account Settings" icon="bx-user" active="" />
     <x-menu_item link="{{route('logout')}}" name="Logout" icon="bx-log-out or power-off" active="" />
- 
-    
 @endpush
 
-@include('header')
+@endsection
 
-<div class="container-xxl flex-grow-1 container-p-y">
+@section('main-body')
 
 <div class="row">
 
@@ -70,10 +72,5 @@
   </div>
 </div>
 
-<div class="row">
+@endsection
 
-</div>
-
-</div>
-
-@include('footer')
