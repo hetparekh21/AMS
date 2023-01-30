@@ -79,7 +79,7 @@ class="btn btn-danger btn-buy-now"
 {{-- @vite(['resources/assets/js/main.js']) --}}
 
 <!-- Page JS -->
-<script src="../assets/js/dashboards-analytics.js"></script>
+{{-- <script src="../assets/js/dashboards-analytics.js"></script> --}}
 
 {{-- @vite(['resources/assets/js/dashboards-analytics.js']) --}}
 

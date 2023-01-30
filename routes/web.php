@@ -25,6 +25,14 @@ use App\Http\Controllers\attendance;
 
 Route::get('/class_attendance/{class_id}',[attendance::class,'class_attendance'])->name('attendance.class');
 
+Route::post('/class_attendance/absent',[attendance::class,'mark_absent'])->name('attendance.absent');  
+
+Route::post('/class_attendance/present',[attendance::class,'mark_present'])->name('attendance.present');
+
+Route::post('/class_attendance/from_suspicious',[attendance::class,'from_suspicious'])->name('attendance.from_suspicious');
+
+Route::get('/class_attendance/export/{class_id}',[attendance::class,'export'])->name('attendance.export');
+
 // Show Qr Code
 Route::get('/qr/{code}', function ($code) {
     // flash some data to session

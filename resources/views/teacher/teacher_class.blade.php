@@ -42,6 +42,7 @@
 
     {{-- Class table --}}
 
+     {{-- try min-vh-100 or h-100 --}}
     <div class="row">
 
       <div class="col-12 col-lg-8 order-2 order-md-3 order-lg-2 mb-4">
@@ -57,7 +58,6 @@
                   <th>Semester</th>
                   <th>Date</th>
                   <th>Actions</th>
-                  <th><a href="https://www.google.com" target="_blank"></a></th>
                 </tr>
               </thead>
               <tbody>
@@ -73,13 +73,10 @@
                           <i class="bx bx-dots-vertical-rounded"></i>
                         </button>
                         <div class="dropdown-menu" >
-                          <a class="dropdown-item" href="{{route('attendance',1)}}"
-                            ><i class="bx bx-detail me-1"></i> Details</a
-                          >
                           <a class="dropdown-item" href="{{route('attendance.class',$data['class_id'])}}"
                             ><i class="bx bx-edit-alt me-1"></i> Attendance</a
                           >
-                          <a class="dropdown-item" href="javascript:void(0);"
+                          <a class="dropdown-item" href="{{route('attendance.export',$data['class_id'])}}"
                             ><i class="bx bxs-file-export"></i> Export Attendance</a
                           >
                           <a class="dropdown-item" target=" _blank" href="{{ route('qr', $data['class_code']) }}"
@@ -138,14 +135,7 @@
 @endsection
 
 @section('scripts')
-{{-- <script>
 
-  // @isset($qr)
-  
-  // @endisset
-  
-
-</script> --}}
 <script>
   
   // check if there are errors in the class initiate form and open it

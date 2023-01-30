@@ -26,7 +26,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // class related
 
-Route::get('/get_classes/{uid}', [classes_api::class,'get_classes'])->name('get.classes');
+Route::get('/get_all_classes/{uid}', [classes_api::class,'get_all_classes'])->name('get.all.classes');
+
+Route::get('/get_classes/{uid}/{query}', [classes_api::class,'get_classes'])->name('get.classes');
 
 // template related
 

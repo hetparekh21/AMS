@@ -26,7 +26,7 @@ class teacher extends Controller
 
         // get classes 
         $teacher = Auth::user(); 
-        $resuest = Request::create(route('get.classes',$teacher->id),'get');
+        $resuest = Request::create(route('get.all.classes',$teacher->id),'get');
         $response = Route::dispatch($resuest);
 
         $classes = json_decode($response->getContent(),true);
