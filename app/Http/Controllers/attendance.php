@@ -12,14 +12,15 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use App\Models\att_jsons;
 use App\Models\classes;
 use App\Models\students;
+use Illuminate\Database\Eloquent\Collection;
 
 class attendance extends Controller
 {
 
     public function class_attendance($class_id)
     {
-         $user = Auth::user();
-         $user_role = $user->role_id; 
+        $user = Auth::user();
+        $user_role = $user->role_id;
 
         // getting class code , subject name , date , semester name , course name
         $class = classes::join('subjects', 'subjects.subject_id', '=', 'classes.subject_id')
@@ -64,7 +65,12 @@ class attendance extends Controller
             );
         }
 
-        return view('attendance.class_attendance', compact('attendance', 'present', 'absent', 'suspicious', 'class', 'class_id','user_role'));
+
+        $c = new Collection($attendance);
+
+        $attendance = $c->paginate(10);
+
+        return view('attendance.class_attendance', compact('attendance', 'present', 'absent', 'suspicious', 'class', 'class_id', 'user_role'));
     }
 
     public function mark_absent(Request $req)
@@ -222,7 +228,7 @@ class attendance extends Controller
         // Set Class Details
         $sheet->setCellValue('A1', 'Class Code :');
         $sheet->setCellValue('B1', $class[0]['class_code']);
-    
+
         $sheet->setCellValue('A2', 'Date :');
         $sheet->setCellValue('B2', $class[0]['date']);
 

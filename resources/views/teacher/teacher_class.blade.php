@@ -64,7 +64,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($classes['data'] as $data)
+                            @foreach ($classes as $data)
                                 <tr>
                                     <td>{{ $data['class_id'] }}</td>
                                     <td>{{ $data['class_code'] }}</td>
@@ -97,25 +97,7 @@
                 </div>
 
                 <div class="d-flex justify-content-center align-items-center">
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination pagination-lg">
-                            @foreach ($classes['links'] as $data)
-                                @if ($data['active'] == '1')
-                                    <li class="page-item active">
-                                        <a class="page-link" href="{{ $data['url'] }}">{!! $data['label'] !!}</a>
-                                    </li>
-                                    {{-- <a name="" id="" class="btn btn-primary m-1 active"
-                                        href="{{ $data['url'] }}" role="button">{!! $data['label'] !!}</a> --}}
-                                @else
-                                    <li class="page-item prev">
-                                        <a class="page-link" href="{{ $data['url'] }}">{!! $data['label'] !!}</a>
-                                    </li>
-                                    {{-- <a name="" id="" class="btn btn-primary m-1" href="{{ $data['url'] }}"
-                                        role="button">{!! $data['label'] !!}</a> --}}
-                                @endif
-                            @endforeach
-                        </ul>
-                    </nav>
+                    {{ $classes->links() }}
                 </div>
 
             </div>

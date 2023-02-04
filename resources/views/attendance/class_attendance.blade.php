@@ -210,6 +210,11 @@
                             </table>
                         </div>
                     </div>
+
+                    <div class="d-flex justify-content-center align-items-center">
+                        {{ $attendance->links() }}
+                    </div>
+
                 </div>
             </div>
 
@@ -227,8 +232,8 @@
                 <div class="card-header text-primary d-flex">
                     <div class="p-2"> Class Details </div>
                     <div class="ml-auto p-2">
-                        <a href="{{route('attendance.export',$class_id)}}" class="card-link">Export Attendance <span><i
-                                    class="bx bxs-file-export"></i></span></a>
+                        <a href="{{ route('attendance.export', $class_id) }}" class="card-link">Export Attendance
+                            <span><i class="bx bxs-file-export"></i></span></a>
                     </div>
                 </div>
                 <div class="card-body">

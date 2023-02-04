@@ -35,12 +35,15 @@ class teacher extends Controller
         $classes = json_decode($response->getContent(), true);
 
         // get templates
-        $resuest = Request::create(route('get.templates',$teacher->id),'get');
+        $resuest = Request::create(route('get.templates', $teacher->id), 'get');
         $response = Route::dispatch($resuest);
+        $templates = json_decode($response->getContent(), true);
 
-        $templates = json_decode($response->getContent(),true);
+        $c = new Collection($classes);
 
-        return view('teacher/teacher_class', compact('classes','templates'));
+        $classes = $c->paginate(10);
+
+        return view('teacher/teacher_class', compact('classes', 'templates'));
     }
 
     public function teacher_account_settings()

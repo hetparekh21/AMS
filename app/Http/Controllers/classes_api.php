@@ -17,32 +17,22 @@ class classes_api extends Controller
 
         if ($user_role[0]['role_id'] == 1) {
 
-            $classes = classes::join('subjects', 'classes.subject_id', '=', 'subjects.subject_id')->
-            join('semesters', 'semesters.semester_id', '=', 'subjects.semester_id')->
-            join('sub_tech', 'subjects.subject_id', '=', 'sub_tech.subject_id')->
-            join('teachers', 'teachers.teacher_id', '=', 'sub_tech.teacher_id')->
-            orderby('classes.date', 'desc')->
-            get(['classes.class_id', 'classes.class_code', 'subjects.subject_name', 'classes.date', 'semesters.semester_name'])->
-            toArray();
+            $classes = classes::join('subjects', 'classes.subject_id', '=', 'subjects.subject_id')->join('semesters', 'semesters.semester_id', '=', 'subjects.semester_id')->join('sub_tech', 'subjects.subject_id', '=', 'sub_tech.subject_id')->join('teachers', 'teachers.teacher_id', '=', 'sub_tech.teacher_id')->orderby('classes.date', 'desc')->get(['classes.class_id', 'classes.class_code', 'subjects.subject_name', 'classes.date', 'semesters.semester_name'])->toArray();
 
             return response()->json($classes);
         }
 
-        $classes = classes::join('subjects', 'classes.subject_id', '=', 'subjects.subject_id')->
-        join('semesters', 'semesters.semester_id', '=', 'subjects.semester_id')->
-        join('sub_tech', 'subjects.subject_id', '=', 'sub_tech.subject_id')->
-        join('teachers', 'teachers.teacher_id', '=', 'sub_tech.teacher_id')->
-        where('teachers.uid', $uid)->orderby('classes.date', 'desc')->
-        get(['classes.class_id', 'classes.class_code', 'subjects.subject_name', 'classes.date', 'semesters.semester_name'])->paginate(10);
+        $classes = classes::join('subjects', 'classes.subject_id', '=', 'subjects.subject_id')->join('semesters', 'semesters.semester_id', '=', 'subjects.semester_id')->join('sub_tech', 'subjects.subject_id', '=', 'sub_tech.subject_id')->join('teachers', 'teachers.teacher_id', '=', 'sub_tech.teacher_id')->where('teachers.uid', $uid)->orderby('classes.date', 'desc')->get(['classes.class_id', 'classes.class_code', 'subjects.subject_name', 'classes.date', 'semesters.semester_name']);
 
-        
-    //    echo $classes->links();
 
-        return response()->json($classes);
+        // echo $classes->links();
+        // dd($classes);
+
+        return json_encode($classes, true);
         // echo '<pre>';
-        // print_r($classes);
+        // print_r(json_encode($classes));
 
-        // print_r($classes->links()) ;
+        // print_r($classes->]links()) ;
     }
 
     public static function get_classes($uid, $query)
