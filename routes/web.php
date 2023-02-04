@@ -23,20 +23,10 @@ use App\Http\Controllers\attendance;
 
 // Attendance Routes
 
-Route::get('/class_attendance/{class_id}',[attendance::class,'class_attendance'])->name('attendance.class');
-
-Route::post('/class_attendance/absent',[attendance::class,'mark_absent'])->name('attendance.absent');  
-
-Route::post('/class_attendance/present',[attendance::class,'mark_present'])->name('attendance.present');
-
-Route::post('/class_attendance/from_suspicious',[attendance::class,'from_suspicious'])->name('attendance.from_suspicious');
-
-Route::get('/class_attendance/export/{class_id}',[attendance::class,'export'])->name('attendance.export');
-
 // Show Qr Code
 Route::get('/qr/{code}', function ($code) {
     // flash some data to session
-    session()->flash('message', 'some route for students'.$code);
+    session()->flash('message', 'some route for students' . $code);
     return view('qr');
 })->name('qr');
 
@@ -47,7 +37,6 @@ Route::middleware('guard_admin')->group(function () {
     Route::group(['prefix' => '/admin'], function () {
 
         Route::get('/', [admin::class, 'admin_dashboard'])->name('admin.dashboard');
-
     });
 });
 
@@ -70,14 +59,26 @@ Route::middleware('guard_teacher')->group(function () {
 
         Route::get('/account', [teacher::class, 'teacher_account_settings'])->name('teacher.account');
 
-        Route::get('/{id}', [class_attendance::class, 'index'])->name('attendance');
+        Route::get('/attendance', [class_attendance::class, 'index'])->name('teacher.attendance');
 
-        Route::post('/initiate',[teacher::class,'initiate_class'])->name('teacher.initiate.class');
+        Route::post('/initiate', [teacher::class, 'initiate_class'])->name('teacher.initiate.class');
 
         Route::post('/create_template', [teacher::class, 'create_template'])->name('teacher.create.template');
 
         Route::post('/handel_template/{id}', [teacher::class, 'handel_template'])->name('teacher.handel.template');
+    });
 
+    Route::group(['prefix' => '/class_attendance'], function () {
+
+        Route::get('/{class_id}', [attendance::class, 'class_attendance'])->name('attendance.class');
+
+        Route::post('/absent', [attendance::class, 'mark_absent'])->name('attendance.absent');
+
+        Route::post('/present', [attendance::class, 'mark_present'])->name('attendance.present');
+
+        Route::post('/from_suspicious', [attendance::class, 'from_suspicious'])->name('attendance.from_suspicious');
+
+        Route::get('/export/{class_id}', [attendance::class, 'export'])->name('attendance.export');
     });
 });
 

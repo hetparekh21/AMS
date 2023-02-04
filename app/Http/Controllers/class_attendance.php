@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class class_attendance extends Controller
 {
-    public function index($id)
+    public function index()
     {
-        echo $id ;
-        return view('attendance');
+        $user = Auth::user();
+
+        $user_role = $user->role_id;
+
+        return view('attendance',compact('user_role'));
     }
 }

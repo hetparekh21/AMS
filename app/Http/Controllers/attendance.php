@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -17,6 +18,8 @@ class attendance extends Controller
 
     public function class_attendance($class_id)
     {
+         $user = Auth::user();
+         $user_role = $user->role_id; 
 
         // getting class code , subject name , date , semester name , course name
         $class = classes::join('subjects', 'subjects.subject_id', '=', 'classes.subject_id')
@@ -61,7 +64,7 @@ class attendance extends Controller
             );
         }
 
-        return view('attendance.class_attendance', compact('attendance', 'present', 'absent', 'suspicious', 'class', 'class_id'));
+        return view('attendance.class_attendance', compact('attendance', 'present', 'absent', 'suspicious', 'class', 'class_id','user_role'));
     }
 
     public function mark_absent(Request $req)

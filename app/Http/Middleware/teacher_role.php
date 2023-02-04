@@ -19,11 +19,12 @@ class teacher_role
     {
         $user = Auth::user();
 
-        if($user->role_id != 2){
+        if ($user->role_id == 2 || $user->role_id ==1) {
+
+            return $next($request);
+        } else {
 
             return redirect()->back();
         }
-
-        return $next($request);
     }
 }

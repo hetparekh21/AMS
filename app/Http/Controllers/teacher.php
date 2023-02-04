@@ -11,6 +11,9 @@ use App\Models\att_jsons;
 use App\Models\students;
 use App\Models\templates;
 use App\Models\teachers;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 class teacher extends Controller
 {
@@ -25,12 +28,12 @@ class teacher extends Controller
     {
 
         // get classes 
-        $teacher = Auth::user(); 
-        $resuest = Request::create(route('get.all.classes',$teacher->id),'get');
+        $teacher = Auth::user();
+        $resuest = Request::create(route('get.all.classes', $teacher->id), 'get');
         $response = Route::dispatch($resuest);
 
-        $classes = json_decode($response->getContent(),true);
-        
+        $classes = json_decode($response->getContent(), true);
+
         // get templates
         $resuest = Request::create(route('get.templates',$teacher->id),'get');
         $response = Route::dispatch($resuest);
@@ -93,7 +96,8 @@ class teacher extends Controller
 
     // template handling
 
-    public function create_template(Request $req){
+    public function create_template(Request $req)
+    {
 
         $req->validate([
             'course_template' => 'required',
@@ -101,7 +105,7 @@ class teacher extends Controller
             'subject_template' => 'required'
         ]);
 
-        $teacher = Auth::user(); 
+        $teacher = Auth::user();
 
         // get course , semester and subject
         $teacher_id = teachers::where('uid', $teacher->id)->get('teacher_id');
@@ -120,16 +124,15 @@ class teacher extends Controller
         $template->save();
 
         return redirect()->route('teacher.class');
-
     }
 
-    public function handel_template($id){
+    public function handel_template($id)
+    {
 
-        if($_POST['action'] == 'Delete'){
+        if ($_POST['action'] == 'Delete') {
 
             templates::where('id', $id)->delete();
-
-        }elseif($_POST['action'] == 'Initiate'){
+        } elseif ($_POST['action'] == 'Initiate') {
 
             $template = templates::where('id', $id)->get()->toArray();
 
@@ -161,12 +164,10 @@ class teacher extends Controller
             $att_json->save();
 
             session()->flash('qr', $class_code);
-
         }
 
         return redirect()->route('teacher.class');
     }
-
 }
 
 function get_clean_json($json_objs)
