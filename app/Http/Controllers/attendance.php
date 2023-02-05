@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
+// excel
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+
 // Models
 use App\Models\att_jsons;
 use App\Models\classes;
@@ -16,6 +19,40 @@ use Illuminate\Database\Eloquent\Collection;
 
 class attendance extends Controller
 {
+
+    public function index(Request $req)
+    {
+        $user = Auth::user();
+        $user_role = $user->role_id;
+        $uid = $user->id;
+        $classes = array();
+
+        $query = $req->input('query') ?? '';
+
+        if($req->method() == "GET"){
+
+            // get classes 
+            $resuest = Request::create(route('get.classes', $uid), 'get');
+            $response = Route::dispatch($resuest);
+            $classes = json_decode($response->getContent(), true);
+
+        }elseif($req->method() == "POST"){
+
+            $query = strtolower($query);
+
+            // get classes
+            $resuest = Request::create(route('get.classes', $uid), 'get',[$query]);
+            $response = Route::dispatch($resuest);
+            $classes = json_decode($response->getContent(), true);
+
+        }
+        
+
+        $c = new Collection($classes);
+        $classes = $c->paginate(10);
+
+        return view('attendance.attendance', compact('user_role', 'uid', 'classes','query'));
+    }
 
     public function class_attendance($class_id)
     {

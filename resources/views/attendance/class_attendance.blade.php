@@ -7,15 +7,9 @@
 
     @push('menu-items')
         @if ($user_role != 1)
-            <x-menu_item link="{{ route('teacher.dashboard') }}" name="Dashboard" icon="bx-home-circle" active="" />
-            <x-menu_item link="{{ route('teacher.class') }}" name="Class" icon="bx-book-open" active="" />
-            <x-menu_item link="{{ route('teacher.attendance') }}" name="Attendance" icon="bx-edit-alt me-1" active="active" />
-            <x-menu_item link="{{ route('teacher.account') }}" name="Account Settings" icon="bx-user" active="" />
-            <x-menu_item link="{{ route('logout') }}" name="Logout" icon="bx-log-out or power-off" active="" />
+            <x-teacher_menu_items dashboard="" class="" attendance="active" account="" />
         @else
-            <x-menu_item link="{{ route('admin.dashboard') }}" name="Dashboard" icon="bx-home-circle" active="" />
-            <x-menu_item link="{{ route('teacher.attendance') }}" name="Attendance" icon="bx-edit-alt me-1" active="active" />
-            <x-menu_item link="{{ route('logout') }}" name="Logout" icon="bx-log-out or power-off" active="" />
+            <x-admin_menu_items dashboard="active" attendance="" />
         @endif
     @endpush
 @endsection
@@ -74,7 +68,7 @@
                         @enderror
                         <div class="table-responsive text-nowrap h-100">
                             <table class="table">
-                                <form method="POST" action="{{ route('attendance.absent') }}">
+                                <form method="POST" action="{{ route('attendance.mark.absent') }}">
                                     <input type="hidden" name="class_id" value="{{ $class_id }}">
                                     @csrf
                                     <div class="mx-4 my-2">
@@ -118,7 +112,7 @@
                         @enderror
                         <div class="table-responsive text-nowrap h-100">
                             <table class="table">
-                                <form method="POST" action="{{ route('attendance.present') }}">
+                                <form method="POST" action="{{ route('attendance.mark.present') }}">
                                     <input type="hidden" name="class_id" value="{{ $class_id }}">
                                     @csrf
                                     <div class="mx-4 my-2">
@@ -164,7 +158,7 @@
                         @enderror
                         <div class="table-responsive text-nowrap h-100">
                             <table class="table">
-                                <form method="POST" action="{{ route('attendance.from_suspicious') }}">
+                                <form method="POST" action="{{ route('attendance.mark.from_suspicious') }}">
                                     <input type="hidden" name="class_id" value="{{ $class_id }}">
                                     @csrf
                                     <div class="mx-4 my-2">

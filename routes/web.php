@@ -59,7 +59,7 @@ Route::middleware('guard_teacher')->group(function () {
 
         Route::get('/account', [teacher::class, 'teacher_account_settings'])->name('teacher.account');
 
-        Route::get('/attendance', [class_attendance::class, 'index'])->name('teacher.attendance');
+        Route::any('/attendance', [attendance::class, 'index'])->name('teacher.attendance');
 
         Route::post('/initiate', [teacher::class, 'initiate_class'])->name('teacher.initiate.class');
 
@@ -72,11 +72,11 @@ Route::middleware('guard_teacher')->group(function () {
 
         Route::get('/{class_id}', [attendance::class, 'class_attendance'])->name('attendance.class');
 
-        Route::post('/absent', [attendance::class, 'mark_absent'])->name('attendance.absent');
+        Route::post('/absent', [attendance::class, 'mark_absent'])->name('attendance.mark.absent');
 
-        Route::post('/present', [attendance::class, 'mark_present'])->name('attendance.present');
+        Route::post('/present', [attendance::class, 'mark_present'])->name('attendance.mark.present');
 
-        Route::post('/from_suspicious', [attendance::class, 'from_suspicious'])->name('attendance.from_suspicious');
+        Route::post('/from_suspicious', [attendance::class, 'from_suspicious'])->name('attendance.mark.from_suspicious');
 
         Route::get('/export/{class_id}', [attendance::class, 'export'])->name('attendance.export');
     });
