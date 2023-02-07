@@ -6,7 +6,7 @@
     @endpush
 
     @push('menu-items')
-        <x-teacher_menu_items dashboard="active" class="" attendance="" account="" />
+        <x-teacher_menu_items dashboard="active" class="" attendance="" subject="" />
     @endpush
 @endsection
 
@@ -26,12 +26,12 @@
 
                             <div id="incomeChart" style="min-height: 215px;"></div>
 
-                            <div class="d-flex justify-content-center pt-4 gap-2">
+                            {{-- <div class="d-flex justify-content-center pt-4 gap-2">
                                 <div>
                                     <p class="mb-n1 mt-1">Expenses This Week</p>
                                     <small class="text-muted">$39 less than last week</small>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="resize-triggers">
                                 <div class="expand-trigger">

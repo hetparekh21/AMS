@@ -7,5 +7,6 @@
                 name="query" />
 
         </div>
+        <a class="btn text-primary" href="{{$action}}">Clear</a>
     </div>
 </form>

@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Collection;
 class attendance extends Controller
 {
 
-    public function index(Request $req)
+    public function attendance_index(Request $req)
     {
         $user = Auth::user();
         $user_role = $user->role_id;
@@ -29,29 +29,16 @@ class attendance extends Controller
 
         $query = $req->input('query') ?? '';
 
-        if($req->method() == "GET"){
+        // get classes 
+        $resuest = Request::create(route('get.classes', $uid), 'POst');
+        $response = Route::dispatch($resuest);
+        $classes = json_decode($response->getContent(), true);
 
-            // get classes 
-            $resuest = Request::create(route('get.classes', $uid), 'get');
-            $response = Route::dispatch($resuest);
-            $classes = json_decode($response->getContent(), true);
-
-        }elseif($req->method() == "POST"){
-
-            $query = strtolower($query);
-
-            // get classes
-            $resuest = Request::create(route('get.classes', $uid), 'get',[$query]);
-            $response = Route::dispatch($resuest);
-            $classes = json_decode($response->getContent(), true);
-
-        }
-        
 
         $c = new Collection($classes);
         $classes = $c->paginate(10);
 
-        return view('attendance.attendance', compact('user_role', 'uid', 'classes','query'));
+        return view('attendance.attendance', compact('user_role', 'uid', 'classes', 'query'));
     }
 
     public function class_attendance($class_id)
@@ -298,5 +285,30 @@ class attendance extends Controller
         header('Content-Disposition: attachment;filename="export.xlsx"');
         header('Cache-Control: max-age=0');
         $writer->save('php://output');
+    }
+
+    public function subject_index()
+    {
+
+        $user = Auth::user();
+        $user_role = $user->role_id;
+        $uid = $user->id;
+
+        $request = Request::create(route('get.all.subjects', $uid));
+        $response = Route::dispatch($request);
+
+        $subjects = json_decode($response->getContent(), true);
+
+        return view('attendance.subject', compact('user_role', 'subjects'));
+    }
+
+    public function subject_attendance($subject_id)
+    {
+
+        $user = Auth::user();
+        $user_role = $user->role_id;
+
+
+        return view('attendance.subject_attendance', compact('user_role'));
     }
 }

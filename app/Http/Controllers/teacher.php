@@ -29,7 +29,7 @@ class teacher extends Controller
 
         // get classes 
         $teacher = Auth::user();
-        $resuest = Request::create(route('get.classes', $teacher->id), 'get');
+        $resuest = Request::create(route('get.teacher.classes', $teacher->id), 'POST');
         $response = Route::dispatch($resuest);
 
         $classes = json_decode($response->getContent(), true);
@@ -172,6 +172,7 @@ class teacher extends Controller
 
         return redirect()->route('teacher.class');
     }
+    
 }
 
 function get_clean_json($json_objs)

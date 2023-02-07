@@ -57,15 +57,21 @@ Route::middleware('guard_teacher')->group(function () {
 
         Route::get('/class', [teacher::class, 'teacher_class'])->name('teacher.class');
 
-        Route::get('/account', [teacher::class, 'teacher_account_settings'])->name('teacher.account');
+        Route::get('/subject', [attendance::class, 'subject_index'])->name('teacher.subject');
 
-        Route::any('/attendance', [attendance::class, 'index'])->name('teacher.attendance');
+        Route::any('/attendance', [attendance::class, 'attendance_index'])->name('teacher.attendance');
 
         Route::post('/initiate', [teacher::class, 'initiate_class'])->name('teacher.initiate.class');
 
         Route::post('/create_template', [teacher::class, 'create_template'])->name('teacher.create.template');
 
         Route::post('/handel_template/{id}', [teacher::class, 'handel_template'])->name('teacher.handel.template');
+    });
+
+    Route::group(['prefix' => '/subject_attendance'],function (){
+
+        Route::get('/{subject_id}', [attendance::class, 'subject_attendance'])->name('attendance.subject');
+
     });
 
     Route::group(['prefix' => '/class_attendance'], function () {
@@ -83,9 +89,9 @@ Route::middleware('guard_teacher')->group(function () {
 });
 
 // Login Logout 
-Route::get('/', function () {
-    return redirect()->route('login.index');
-});
+// Route::get('/', function () {
+//     return redirect()->route('login.index');
+// });
 
 Route::get('/logout', function () {
     Auth::logout();

@@ -7,9 +7,9 @@
 
     @push('menu-items')
         @if ($user_role != 1)
-            <x-teacher_menu_items dashboard="" class="" attendance="active" account="" />
+            <x-teacher_menu_items dashboard="" class="" attendance="active" subject="" />
         @else
-            <x-admin_menu_items dashboard="active" attendance="" />
+            <x-admin_menu_items dashboard="" attendance="active" />
         @endif
     @endpush
 @endsection
@@ -232,9 +232,9 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title ">Class Code : {{ $class[0]['class_code'] }}</h5>
-                    <p class="card-text">subject : {{ $class[0]['subject_name'] }} <br>
-                        Course : {{ $class[0]['course_name'] }} <br>
-                        Semester : {{ $class[0]['semester_name'] }}
+                    <p class="card-text">subject : <span class="fw-bold">{{ $class[0]['subject_name'] }}</span> <br>
+                        Course : <span class="fw-bold">{{ $class[0]['course_name'] }}</span> <br>
+                        Semester : <span class="fw-bold">{{ $class[0]['semester_name'] }}</span>
                     </p>
                     <span class="text-muted">Date : {{ $class[0]['date'] }}</span>
                 </div>

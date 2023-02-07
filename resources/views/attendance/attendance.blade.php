@@ -7,9 +7,9 @@
 
     @push('menu-items')
         @if ($user_role != 1)
-            <x-teacher_menu_items dashboard="" class="" attendance="active" account="" />
+            <x-teacher_menu_items dashboard="" class="" attendance="active" subject="" />
         @else
-            <x-admin_menu_items dashboard="" attendance="active" />
+            <x-admin_menu_items dashboard="" attendance="active" subject="" />
         @endif
     @endpush
 
@@ -74,7 +74,7 @@
                     </table>
                 </div>
 
-                <div class="d-flex justify-content-center align-items-center">
+                <div class="d-flex justify-content-center align-items-center mt-5">
                     {{ $classes->links() }}
                 </div>
 

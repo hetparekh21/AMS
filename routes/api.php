@@ -26,7 +26,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // class related
 
-Route::get('/get_classes/{uid}', [classes_api::class,'get_classes'])->name('get.classes');
+Route::Post('/get_classes/{uid}', [classes_api::class,'get_classes'])->name('get.classes');
+
+Route::Post('/get_teacher_classes/{uid}', [classes_api::class,'get_teacher_classes'])->name('get.teacher.classes');
 
 // template related
 
@@ -43,3 +45,5 @@ Route::get('/get_semester',[semesters_api::class,'get_semester'])->name('get.sem
 // subject related
 
 Route::get('/get_subjects',[subjects_api::class,'get_subjects'])->name('get.subjects');
+
+Route::any('/get_all_subjects/{uid}',[subjects_api::class,'get_all_subjects'])->name('get.all.subjects');
