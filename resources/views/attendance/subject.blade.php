@@ -2,7 +2,7 @@
 
 @section('nav-components')
     @push('title')
-        <title>Subject Attendance</title>
+        <title>Subject</title>
     @endpush
 
     @push('menu-items')

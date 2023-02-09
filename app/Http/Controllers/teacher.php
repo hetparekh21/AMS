@@ -122,8 +122,6 @@ class teacher extends Controller
 
         $template = new templates;
         $template->teacher_id = $teacher_id[0]['teacher_id'];
-        $template->course_id = $course;
-        $template->semester_id = $semester;
         $template->subject_id = $subject;
         $template->save();
 
@@ -138,7 +136,8 @@ class teacher extends Controller
             templates::where('id', $id)->delete();
         } elseif ($_POST['action'] == 'Initiate') {
 
-            $template = templates::where('id', $id)->get()->toArray();
+            // $template = templates::where('id', $id)->get()->toArray();
+            $template = templates::join('subjects','subjects.subject_id','templates.subject_id')->where('templates.id',$id)->get(['subjects.subject_id','subjects.course_id','subjects.semester_id'])->toarray();
 
             // insert into class
             $class_code = get_unique_code();

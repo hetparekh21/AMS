@@ -309,6 +309,8 @@ class attendance extends Controller
         $user_role = $user->role_id;
 
 
+        
+
         return view('attendance.subject_attendance', compact('user_role'));
     }
 }

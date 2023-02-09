@@ -39,16 +39,6 @@ class templates extends Model
 		'semester_id'
 	];
 
-	public function course()
-	{
-		return $this->belongsTo(Course::class);
-	}
-
-	public function semester()
-	{
-		return $this->belongsTo(Semester::class);
-	}
-
 	public function subject()
 	{
 		return $this->belongsTo(Subject::class);

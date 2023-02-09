@@ -176,8 +176,6 @@
                         labels: {
                             show: false
                         },
-                        min: 10,
-                        max: 50,
                         tickAmount: 4
                     }
                 };

@@ -89,9 +89,10 @@ Route::middleware('guard_teacher')->group(function () {
 });
 
 // Login Logout 
-// Route::get('/', function () {
-//     return redirect()->route('login.index');
-// });
+Route::get('/', function () {
+    return redirect()->route('login.index');
+});
+
 
 Route::get('/logout', function () {
     Auth::logout();
