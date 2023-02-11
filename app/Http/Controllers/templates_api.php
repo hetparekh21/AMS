@@ -17,8 +17,9 @@ class templates_api extends Controller
             ->join('courses', 'subjects.course_id', '=', 'courses.course_id')
             ->select('id','subjects.subject_name', 'courses.course_name', 'semesters.semester_name')
             ->where('templates.teacher_id', $teacher[0]['teacher_id'])
-            ->get();
+            ->get()->toarray();
             
+        // dd($templates);
         return json_encode($templates);
     }
 }
