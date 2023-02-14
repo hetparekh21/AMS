@@ -13,8 +13,53 @@
 @section('main-body')
     <div class="row">
 
+
+        <div class="col-md-4 order-1 order-md-1 order-lg-1 mb-4">
+            <div class="card">
+                <div class="d-flex align-items-end row">
+                    <div class="card-body">
+
+                        <span class="card-title text-primary h4"> Total Classes : </span><span class="fw-bold">100</span>
+                        {{-- class="fw-bold">{{ $subject_details[0]['subject_name'] }}</span> --}}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 order-1 order-md-1 order-lg-1 mb-4">
+            <div class="card">
+                <div class="d-flex align-items-end row">
+                    <div class="card-body">
+
+                        <span class="card-title text-primary h4"> Semester : </span><span class="fw-bold">IDK</span>
+                        {{-- class="fw-bold">{{ $subject_details[0]['semester_name'] }}</span> --}}
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 order-1 order-md-1 order-lg-1 mb-4">
+            <div class="card">
+                <div class="d-flex align-items-end row">
+                    <div class="card-body">
+
+                        <a><span class="card-title text-primary h4"> Teacher : </span><span class="fw-bold">LOL</span></a>
+                        {{-- class="fw-bold">{{ $subject_details[0]['teacher_name'] }}</span></a> --}}
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
         {{-- chart --}}
-        <div class="col-12 col-lg-8 order-1 mb-4">
+        <div class="col-12 col-lg-12 order-1 mb-4">
             <div class="card h-100">
                 <div class="card-header">
                     SRR
@@ -25,13 +70,6 @@
                             style="position: relative;">
 
                             <div id="incomeChart" style="min-height: 215px;"></div>
-
-                            {{-- <div class="d-flex justify-content-center pt-4 gap-2">
-                                <div>
-                                    <p class="mb-n1 mt-1">Expenses This Week</p>
-                                    <small class="text-muted">$39 less than last week</small>
-                                </div>
-                            </div> --}}
 
                             <div class="resize-triggers">
                                 <div class="expand-trigger">
@@ -44,38 +82,12 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-lg-4 col-md-4 order-2">
-
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title d-flex align-items-start justify-content-between">
-                        <div class="avatar flex-shrink-0">
-                            <img src="../assets/img/icons/unicons/chart-success.png" alt="chart success" class="rounded">
-                        </div>
-                        <div class="dropdown">
-                            <button class="btn p-0" type="button" id="cardOpt3" data-bs-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
-                                <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                    <span class="fw-semibold d-block mb-1">Profit</span>
-                    <h3 class="card-title mb-2">$12,628</h3>
-                    <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
-                </div>
-            </div>
-
-        </div>
+        {{-- chart end --}}
     </div>
 @endsection
 
 @section('scripts')
-    <script>
+    {{-- <script>
         /**
          * Dashboard Analytics
          */
@@ -182,6 +194,130 @@
             if (typeof incomeChartEl !== undefined && incomeChartEl !== null) {
                 const incomeChart = new ApexCharts(incomeChartEl, incomeChartConfig);
                 incomeChart.render();
+            }
+        })();
+    </script> --}}
+
+    <script>
+        /**
+         * Dashboard Analytics
+         */
+
+        'use strict';
+
+        (function() {
+            let cardColor, headingColor, axisColor, shadeColor, borderColor, data, length, second;
+
+            cardColor = config.colors.white;
+            headingColor = config.colors.headingColor;
+            axisColor = config.colors.axisColor;
+            borderColor = config.colors.borderColor;
+            shadeColor = '#696cff';
+
+            // {{-- second = [{{ $total_stu_str }}] --}}
+
+            data = [1,2,3,4,5,6,7,8,9,10,11,12,13];
+            length = data.length - 1;
+
+            const piechart = document.querySelector('#incomeChart'),
+                piechartConfig = {
+                    series: [{
+                        name: "Average",
+                        data: data
+                    },
+                    //  {
+                    //     name: "Total Students",
+                    //     data: second
+                    // }
+                ],
+                    chart: {
+                        height: 215,
+                        parentHeightOffset: 0,
+                        parentWidthOffset: 0,
+                        toolbar: {
+                            show: true,
+                            tools: {
+                                pan: false
+                            }
+                        },
+                        type: 'area'
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        width: 2,
+                        curve: 'smooth'
+                    },
+                    legend: {
+                        show: false
+                    },
+                    markers: {
+                        size: 6,
+                        colors: 'transparent',
+                        strokeColors: 'transparent',
+                        strokeWidth: 4,
+                        discrete: [{
+                            fillColor: config.colors.white,
+                            seriesIndex: 0,
+                            // little dot on the end
+                            dataPointIndex: length,
+                            strokeColor: config.colors.primary,
+                            strokeWidth: 2,
+                            size: 6,
+                            radius: 8
+                        }],
+                        hover: {
+                            size: 7
+                        }
+                    },
+                    colors: [config.colors.primary, config.colors.secondary],
+                    fill: {
+                        type: 'gradient',
+                        gradient: {
+                            shade: shadeColor,
+                            shadeIntensity: 0.6,
+                            opacityFrom: 0.5,
+                            opacityTo: 0.25,
+                            stops: [0, 95, 100]
+                        }
+                    },
+                    grid: {
+                        borderColor: borderColor,
+                        strokeDashArray: 3,
+                        // padding: {
+                        //     top: -20,
+                        //     bottom: -8,
+                        //     left: -10,
+                        //     right: 8
+                        // }
+                    },
+                    xaxis: {
+                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov','Dec'],
+                        axisBorder: {
+                            show: false
+                        },
+                        axisTicks: {
+                            show: false
+                        },
+                        labels: {
+                            show: true,
+                            style: {
+                                fontSize: '13px',
+                                colors: axisColor
+                            }
+                        }
+                    },
+                    yaxis: {
+                        labels: {
+                            show: false
+                        },
+                        tickAmount: 4
+                    }
+                };
+            if (typeof piechart !== undefined && piechart !== null) {
+                const pieChart_ = new ApexCharts(piechart, piechartConfig);
+                pieChart_.render();
             }
         })();
     </script>
