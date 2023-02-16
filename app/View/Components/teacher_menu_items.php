@@ -6,19 +6,20 @@ use Illuminate\View\Component;
 
 class teacher_menu_items extends Component
 {
-    public $dashboard, $class, $subject, $attendance;
+    public $dashboard, $class, $subject, $attendance , $student;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($dashboard, $class, $attendance, $subject)
+    public function __construct($dashboard, $class, $attendance, $subject,$student)
     {
         $this->dashboard = $dashboard;
         $this->class = $class;
         $this->subject = $subject;
         $this->attendance = $attendance;
+        $this->student = $student;
     }
 
     /**

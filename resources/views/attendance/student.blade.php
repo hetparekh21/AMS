@@ -2,19 +2,19 @@
 
 @section('nav-components')
     @push('title')
-        <title>Attendance</title>
+        <title>Student</title>
     @endpush
 
     @push('menu-items')
         @if ($user_role != 1)
-            <x-teacher_menu_items dashboard="" class="" attendance="active" subject="" student="" />
+            <x-teacher_menu_items dashboard="" class="" attendance="" subject="" student="active" />
         @else
             <x-admin_menu_items dashboard="" attendance="active" subject="" />
         @endif
     @endpush
 
     @push('search')
-        <x-search action="{{ route('teacher.attendance') }}" query="{{ $query }}" />
+        <x-search action="{{ route('teacher.student') }}" query="{{ $query }}" />
     @endpush
 
 @endsection
@@ -23,32 +23,30 @@
     <div class="row">
         <div class="col-12 col-lg-12 order-2 order-md-3 order-lg-2 mb-4">
             <div class="card h-100">
-                <h5 class="card-header text-primary">Your Classes</h5>
+                <h5 class="card-header text-primary">Students</h5>
                 <div class="table-responsive text-nowrap h-100">
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Class Code</th>
-                                <th>Subject</th>
+                                <th>Roll no</th>
+                                <th>Student Name</th>
+                                <th>Course</th>
                                 <th>Semester</th>
-                                <th>Date</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if (empty($classes->total() != 0))
+                            @if (empty($students->total() != 0))
                                 <tr>
-                                    <td colspan="6" class="text-center">No Classes Found</td>
+                                    <td colspan="6" class="text-center">No Students Found</td>
                                 </tr>
                             @endif
-                            @foreach ($classes as $data)
+                            @foreach ($students as $data)
                                 <tr>
-                                    <td>{{ $data['class_id'] }}</td>
-                                    <td>{{ $data['class_code'] }}</td>
-                                    <td>{{ $data['subject_name'] }}</td>
+                                    <td>{{ $data['roll_no'] }}</td>
+                                    <td>{{ $data['student_name'] }}</td>
+                                    <td>{{ $data['course_name'] }}</td>
                                     <td>{{ $data['semester_name'] }}</td>
-                                    <td>{{ $data['date'] }}</td>
                                     <td>
                                         <div class="dropdown">
                                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
@@ -57,13 +55,13 @@
                                             </button>
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item"
-                                                    href="{{ route('attendance.class', $data['class_id']) }}"><i
+                                                    href=""><i
                                                         class="bx bx-edit-alt me-1"></i> Attendance</a>
                                                 <a class="dropdown-item"
-                                                    href="{{ route('attendance.export', $data['class_id']) }}"><i
+                                                    href=""><i
                                                         class="bx bxs-file-export"></i> Export Attendance</a>
                                                 <a class="dropdown-item" target=" _blank"
-                                                    href="{{ route('qr', $data['class_code']) }}"><i
+                                                    href=""><i
                                                         class="bx bx-qr-scan me-1"></i> Show QR</a>
                                             </div>
                                         </div>
@@ -75,7 +73,7 @@
                 </div>
 
                 <div class="d-flex justify-content-center align-items-center mt-5">
-                    {{ $classes->links() }}
+                    {{ $students->links() }}
                 </div>
 
             </div>

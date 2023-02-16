@@ -1,27 +1,43 @@
 <?php
 
-use App\Models\classes;
+use App\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
-function get_unique_code() : string{
+function user_info()
+{
 
-$code = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 5);
+    $user = Auth::user();
 
-$sql = "SELECT * FROM class WHERE class_code = '$code'";
+    $name = $user->name;
+    $role = role::where('role_id', $user->role_id)->get('role_name')->toarray();
 
-$result = classes::all()->where(['class_code',$code]);
-
-// $result = $conn->query($sql) or die("Error: " . $sql . "<br>" . $conn->error);
-
-if($result->num_rows > 0){
-
-    $code =  get_unique_code();
-
-}else{
-
-    return $code;
+    return [$name, $role[0]['role_name']];
 }
 
-return $code;
+function get_average(string $total_stu, ...$months)
+{
 
+    $avg = '';
+    $total_stu_str = '';
+
+    foreach ($months as $month) {
+
+        $classes_len = count($month);
+
+        $total_present = 0;
+
+        for ($i = 0; $i < $classes_len; $i++) {
+            $attendance = json_decode($month[$i]['att_json'], true);
+            foreach ($attendance as $key => $value) {
+                if ($value == 1) {
+                    $total_present++;
+                }
+            }
+        }
+
+        $avg .= $classes_len != 0 ? round(($total_present / $classes_len)) . "," : 0 . ",";
+        $total_stu_str .= $total_stu . ",";
+    }
+
+    return [$avg, $total_stu_str];
 }
-

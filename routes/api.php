@@ -3,11 +3,12 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\courses_api ;
-use App\Http\Controllers\semesters_api ;
-use App\Http\Controllers\subjects_api ;
-use App\Http\Controllers\classes_api ;
-use App\Http\Controllers\templates_api ;
+use App\Http\Controllers\apis\courses_api ;
+use App\Http\Controllers\apis\semesters_api ;
+use App\Http\Controllers\apis\subjects_api ;
+use App\Http\Controllers\apis\classes_api ;
+use App\Http\Controllers\apis\student_api;
+use App\Http\Controllers\apis\templates_api ;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::Post('/get_classes/{uid}', [classes_api::class,'get_classes'])->name('get.classes');
 
 Route::Post('/get_teacher_classes/{uid}', [classes_api::class,'get_teacher_classes'])->name('get.teacher.classes');
+
+// student related
+
+Route::Post('/get_students/{uid}', [student_api::class,'get_students'])->name('get.students');
 
 // template related
 

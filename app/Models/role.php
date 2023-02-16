@@ -1,9 +1,4 @@
 <?php
-
-/**
- * Created by Reliese Model.
- */
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Collection;
@@ -19,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Models
  */
-class Role extends Model
+class role extends Model
 {
 	protected $table = 'role';
 	protected $primaryKey = 'role_id';

@@ -42,10 +42,15 @@ Route::middleware('guard_admin')->group(function () {
 
 // Student Routes
 Route::middleware('guard_student')->group(function () {
+
     Route::group(['prefix' => '/student'], function () {
 
         Route::get('/', [student::class, 'student_dashboard'])->name('student.dashboard')->middleware('auth');
+
+        Route::get('/mark/{class_code}',[student::class,'mark_attendance'])->name('student.mark.attendance');
+
     });
+
 });
 
 // Teacher Routes 
@@ -56,6 +61,8 @@ Route::middleware('guard_teacher')->group(function () {
         Route::get('/', [teacher::class, 'teacher_dashboard'])->name('teacher.dashboard');
 
         Route::get('/class', [teacher::class, 'teacher_class'])->name('teacher.class');
+
+        Route::any('/student', [attendance::class, 'student_index'])->name('teacher.student');
 
         Route::get('/subject', [attendance::class, 'subject_index'])->name('teacher.subject');
 

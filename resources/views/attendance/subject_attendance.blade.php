@@ -7,7 +7,7 @@
 
     @push('menu-items')
         @if ($user_role != 1)
-            <x-teacher_menu_items dashboard="" class="" attendance="" subject="active" />
+            <x-teacher_menu_items dashboard="" class="" attendance="" subject="active" student="" />
         @else
             <x-admin_menu_items dashboard="" attendance="" subject="active" />
         @endif
@@ -18,39 +18,52 @@
     <div class="row">
 
 
-        <div class="col-md-4 order-1 order-md-1 order-lg-1 mb-4">
+        <div class="col-md-3 order-1 order-md-1 order-lg-1 mb-4">
             <div class="card">
                 <div class="d-flex align-items-end row">
                     <div class="card-body">
 
-                        <span class="card-title text-primary h4"> Subject : </span><span
-                            class="fw-bold">{{ $subject_details[0]['subject_name'] }}</span>
+                        <span class="card-title text-primary h5"> Subject : </span><span
+                            class="fw-bold h5">{{ $subject_details[0]['subject_name'] }}</span>
 
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 order-1 order-md-1 order-lg-1 mb-4">
+        <div class="col-md-3 order-1 order-md-1 order-lg-1 mb-4">
             <div class="card">
                 <div class="d-flex align-items-end row">
                     <div class="card-body">
 
-                        <span class="card-title text-primary h4"> Semester : </span><span
-                            class="fw-bold">{{ $subject_details[0]['semester_name'] }}</span>
+                        <span class="card-title text-primary h5"> Semester : </span><span
+                            class="fw-bold h5">{{ $subject_details[0]['semester_name'] }}</span>
 
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 order-1 order-md-1 order-lg-1 mb-4">
+        <div class="col-md-3 order-1 order-md-1 order-lg-1 mb-4">
             <div class="card">
                 <div class="d-flex align-items-end row">
                     <div class="card-body">
 
-                        <a><span class="card-title text-primary h4"> Teacher : </span><span
-                                class="fw-bold">{{ $subject_details[0]['teacher_name'] }}</span></a>
+                        <span class="card-title text-primary h5"> Classes Conducted : </span><span
+                            class="fw-bold h5">{{ $total_classes }}</span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 order-1 order-md-1 order-lg-1 mb-4">
+            <div class="card">
+                <div class="d-flex align-items-end row">
+                    <div class="card-body">
+
+                        <a><span class="card-title text-primary h5"> Teacher : </span><span
+                                class="fw-bold h5">{{ $subject_details[0]['name'] }}</span></a>
 
                     </div>
                 </div>

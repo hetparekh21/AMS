@@ -1,11 +1,15 @@
-@push('title')
-    <title>Admin Dashboard</title>
-@endpush
+@extends('layouts.content')
 
-@push('menu-items')
-    <x-admin_menu_items dashboard="active" attendance="" subject="" />
-@endpush
+@section('nav-components')
+    @push('title')
+        <title>Admin Dashboard</title>
+    @endpush
 
-@include('layouts.header')
+    @push('menu-items')
+        <x-admin_menu_items dashboard="active" attendance="" subject="" />
+    @endpush
+@endsection
 
-@include('layouts.footer')
+@section('main-body')
+    
+@endsection

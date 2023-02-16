@@ -6,7 +6,7 @@
     @endpush
 
     @push('menu-items')
-        <x-teacher_menu_items dashboard="active" class="" attendance="" subject="" />
+        <x-teacher_menu_items dashboard="active" class="" attendance="" subject="" student="" />
     @endpush
 @endsection
 
@@ -14,41 +14,52 @@
     <div class="row">
 
 
-        <div class="col-md-4 order-1 order-md-1 order-lg-1 mb-4">
+        <div class="col-md-3 order-1 order-md-1 order-lg-1 mb-4">
             <div class="card">
                 <div class="d-flex align-items-end row">
                     <div class="card-body">
 
-                        <span class="card-title text-primary h4"> Total Classes : </span><span class="fw-bold">100</span>
-                        {{-- class="fw-bold">{{ $subject_details[0]['subject_name'] }}</span> --}}
+                        <span class="card-title text-primary h4">Courses : </span><span
+                            class="h5">{{ $total_courses }}</span>
 
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 order-1 order-md-1 order-lg-1 mb-4">
+        <div class="col-md-3 order-1 order-md-1 order-lg-1 mb-4">
             <div class="card">
                 <div class="d-flex align-items-end row">
                     <div class="card-body">
 
-                        <span class="card-title text-primary h4"> Semester : </span><span class="fw-bold">IDK</span>
-                        {{-- class="fw-bold">{{ $subject_details[0]['semester_name'] }}</span> --}}
-
+                        <span class="card-title text-primary h4">Subjects : </span><span
+                            class="h5">{{ $total_subjects }}</span>
 
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 order-1 order-md-1 order-lg-1 mb-4">
+        <div class="col-md-3 order-1 order-md-1 order-lg-1 mb-4">
             <div class="card">
                 <div class="d-flex align-items-end row">
                     <div class="card-body">
 
-                        <a><span class="card-title text-primary h4"> Teacher : </span><span class="fw-bold">LOL</span></a>
-                        {{-- class="fw-bold">{{ $subject_details[0]['teacher_name'] }}</span></a> --}}
+                        <span class="card-title text-primary h4">Classes Conducted : </span><span
+                            class="h5">{{ $total_classes }}</span>
 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 order-1 order-md-1 order-lg-1 mb-4">
+            <div class="card">
+                <div class="d-flex align-items-end row">
+                    <div class="card-body">
+
+                        <a><span class="card-title text-primary h4"> Teacher : </span><span
+                                class="h5">{{ user_info()[0] }}</span></a>
 
                     </div>
                 </div>
@@ -62,7 +73,7 @@
         <div class="col-12 col-lg-12 order-1 mb-4">
             <div class="card h-100">
                 <div class="card-header">
-                    SRR
+                    Average Attendance
                 </div>
                 <div class="card-body px-0">
                     <div class="tab-content p-0">
@@ -216,20 +227,20 @@
 
             // {{-- second = [{{ $total_stu_str }}] --}}
 
-            data = [1,2,3,4,5,6,7,8,9,10,11,12,13];
+            data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
             length = data.length - 1;
 
             const piechart = document.querySelector('#incomeChart'),
                 piechartConfig = {
                     series: [{
-                        name: "Average",
-                        data: data
-                    },
-                    //  {
-                    //     name: "Total Students",
-                    //     data: second
-                    // }
-                ],
+                            name: "Average",
+                            data: data
+                        },
+                        //  {
+                        //     name: "Total Students",
+                        //     data: second
+                        // }
+                    ],
                     chart: {
                         height: 215,
                         parentHeightOffset: 0,
@@ -293,7 +304,8 @@
                         // }
                     },
                     xaxis: {
-                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov','Dec'],
+                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov',
+                            'Dec'],
                         axisBorder: {
                             show: false
                         },

@@ -14,7 +14,6 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 // Models
 use App\Models\att_jsons;
 use App\Models\classes;
-use App\Models\courses;
 use App\Models\students;
 use App\Models\subjects;
 use Illuminate\Database\Eloquent\Collection;
@@ -311,16 +310,16 @@ class attendance extends Controller
         $user_role = $user->role_id;
 
         $subject_details = subjects::join('courses', 'subjects.course_id', 'courses.course_id')
-        ->join('semesters', 'subjects.semester_id', 'semesters.semester_id')
-        ->join('sub_tech', 'sub_tech.subject_id', 'subjects.subject_id')
-        ->join('teachers', 'teachers.teacher_id', 'sub_tech.teacher_id')
-        ->where('subjects.subject_id', $subject_id)
-        ->get(['subject_name', 'semester_name', 'course_name', 'teacher_name'])->toarray();
+            ->join('semesters', 'subjects.semester_id', 'semesters.semester_id')
+            ->join('sub_tech', 'sub_tech.subject_id', 'subjects.subject_id')
+            ->join('teachers', 'teachers.teacher_id', 'sub_tech.teacher_id')
+            ->join('users','teachers.uid','users.id')
+            ->where('subjects.subject_id', $subject_id)
+            ->get(['subject_name', 'semester_name', 'course_name', 'users.name'])->toarray();
 
-        $classes = classes::join('subjects','subjects.subject_id','classes.subject_id')->
-        join('courses','courses.course_id','subjects.course_id')->
-        join('semesters','semesters.semester_id','subjects.semester_id')->
-        where('subjects.subject_id', $subject_id)->orderby('date','DESC')->limit(10)->get(['class_id','class_code','subject_name','semester_name','date'])->toarray();
+        $total_classes = classes::where('subject_id', $subject_id)->count() ;
+
+        $classes = classes::join('subjects', 'subjects.subject_id', 'classes.subject_id')->join('courses', 'courses.course_id', 'subjects.course_id')->join('semesters', 'semesters.semester_id', 'subjects.semester_id')->where('subjects.subject_id', $subject_id)->orderby('date', 'DESC')->limit(10)->get(['class_id', 'class_code', 'subject_name', 'semester_name', 'date'])->toarray();
 
         $jan = att_jsons::join('classes', 'att_jsons.class_id', 'classes.class_id')->where('classes.subject_id', $subject_id)->whereraw('month(date) = 1 and year(date) = year(curdate())')->get('att_json')->toarray();
         $feb = att_jsons::join('classes', 'att_jsons.class_id', 'classes.class_id')->where('classes.subject_id', $subject_id)->whereraw('month(date) = 2 and year(date) = year(curdate())')->get('att_json')->toarray();
@@ -335,41 +334,34 @@ class attendance extends Controller
         $nov = att_jsons::join('classes', 'att_jsons.class_id', 'classes.class_id')->where('classes.subject_id', $subject_id)->whereraw('month(date) = 11 and year(date) = year(curdate())')->get('att_json')->toarray();
         $dec = att_jsons::join('classes', 'att_jsons.class_id', 'classes.class_id')->where('classes.subject_id', $subject_id)->whereraw('month(date) = 12 and year(date) = year(curdate())')->get('att_json')->toarray();
 
-        $total_stu = students::join('courses','students.course_id','courses.course_id')->join('subjects','subjects.course_id','courses.course_id')->where('subjects.subject_id',$subject_id)->get('students.student_id')->count();
+        $total_stu = round(students::join('courses', 'students.course_id', 'courses.course_id')->join('subjects', 'subjects.course_id', 'courses.course_id')->where('subjects.subject_id', $subject_id)->get('students.student_id')->count());
 
-        $a = get_average($total_stu,$jan, $feb, $mar, $apr, $may, $jun, $jul, $aug, $sep, $oct, $nov, $dec);
+        $a = get_average($total_stu, $jan, $feb, $mar, $apr, $may, $jun, $jul, $aug, $sep, $oct, $nov, $dec);
 
         $avg = $a[0];
         $total_stu_str = $a[1];
 
-        return view('attendance.subject_attendance', compact('user_role', 'avg', 'subject_details','total_stu_str','classes'));
-    }
-}
-
-function get_average(string $total_stu,...$months)
-{
-
-    $avg = '';
-    $total_stu_str = '';
-
-    foreach ($months as $month) {
-
-        $classes_len = count($month);
-
-        $total_present = 0;
-
-        for ($i = 0; $i < $classes_len; $i++) {
-            $attendance = json_decode($month[$i]['att_json'], true);
-            foreach ($attendance as $key => $value) {
-                if ($value == 1) {
-                    $total_present++;
-                }
-            }
-        }
-
-        $avg .= $classes_len != 0 ? ($total_present / $classes_len) . "," : 0 . ",";
-        $total_stu_str .= $total_stu . "," ;
+        return view('attendance.subject_attendance', compact('user_role', 'avg', 'subject_details', 'total_stu_str','total_classes', 'classes'));
     }
 
-    return [$avg,$total_stu_str];
+    public function student_index(Request $req)
+    {
+        $user = Auth::user();
+        $user_role = $user->role_id;
+        $uid = $user->id;
+        $classes = array();
+
+        $query = $req->input('query') ?? '';
+
+        // get students
+        $resuest = Request::create(route('get.students', $uid), 'POST');
+        $response = Route::dispatch($resuest);
+        $students = json_decode($response->getContent(), true);
+
+
+        $c = new Collection($students);
+        $students = $c->paginate(10);
+
+        return view('attendance.student', compact('user_role', 'uid', 'students' ,'query'));
+    }
 }

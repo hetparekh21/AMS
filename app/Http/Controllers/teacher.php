@@ -8,12 +8,13 @@ use Illuminate\Support\Facades\Route;
 
 use App\Models\classes;
 use App\Models\att_jsons;
+use App\Models\courses;
 use App\Models\students;
+use App\Models\subjects;
 use App\Models\templates;
 use App\Models\teachers;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
 
 class teacher extends Controller
 {
@@ -21,7 +22,33 @@ class teacher extends Controller
     public function teacher_dashboard()
     {
 
-        return view('teacher/teacher_dashboard');
+        $teacher = Auth::user();
+        $teacher_name = $teacher->name;
+
+        $total_classes = classes::join('subjects', 'subjects.subject_id', 'classes.subject_id')
+            ->join('sub_tech', 'sub_tech.subject_id', 'subjects.subject_id')
+            ->join('teachers', 'teachers.teacher_id', 'sub_tech.teacher_id')
+            ->where('teachers.uid', $teacher->id)->get('class_id')->count();
+
+        $total_subjects = subjects::join('sub_tech', 'sub_tech.subject_id', 'subjects.subject_id')
+            ->join('teachers', 'teachers.teacher_id', 'sub_tech.teacher_id')
+            ->where('teachers.uid', $teacher->id)->get('subjects.subject_id')->count();
+
+        $total_courses = DB::select('SELECT
+                                        COUNT(DISTINCT(c.course_id))
+                                    FROM
+                                        courses c
+                                    JOIN subjects s ON
+                                        s.course_id = c.course_id
+                                    JOIN sub_tech st ON
+                                        st.subject_id = s.subject_id
+                                    JOIN teachers t ON
+                                        t.teacher_id = st.teacher_id
+                                        WHERE t.uid = '. $teacher->id .';');
+
+        $total_courses = $total_courses[0]->{'COUNT(DISTINCT(c.course_id))'};
+
+        return view('teacher/teacher_dashboard', compact('teacher_name', 'total_classes','total_courses', 'total_subjects'));
     }
 
     public function teacher_class()
@@ -137,7 +164,7 @@ class teacher extends Controller
         } elseif ($_POST['action'] == 'Initiate') {
 
             // $template = templates::where('id', $id)->get()->toArray();
-            $template = templates::join('subjects','subjects.subject_id','templates.subject_id')->where('templates.id',$id)->get(['subjects.subject_id','subjects.course_id','subjects.semester_id'])->toarray();
+            $template = templates::join('subjects', 'subjects.subject_id', 'templates.subject_id')->where('templates.id', $id)->get(['subjects.subject_id', 'subjects.course_id', 'subjects.semester_id'])->toarray();
 
             // insert into class
             $class_code = get_unique_code();
@@ -171,7 +198,6 @@ class teacher extends Controller
 
         return redirect()->route('teacher.class');
     }
-    
 }
 
 function get_clean_json($json_objs)

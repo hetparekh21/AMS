@@ -6,7 +6,7 @@
     @endpush
 
     @push('menu-items')
-        <x-teacher_menu_items dashboard="" class="" attendance="" subject="active" />
+        <x-teacher_menu_items dashboard="" class="" attendance="" subject="active" student="" />
     @endpush
 @endsection
 
