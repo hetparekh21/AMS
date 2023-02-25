@@ -26,8 +26,8 @@ use App\Http\Controllers\attendance;
 // Show Qr Code
 Route::get('/qr/{code}', function ($code) {
     // flash some data to session
-    session()->flash('message', 'some route for students' . $code);
-    return view('qr');
+    session()->flash('message', $code);
+    return view('qr',compact('code'));
 })->name('qr');
 
 
@@ -47,7 +47,7 @@ Route::middleware('guard_student')->group(function () {
 
         Route::get('/', [student::class, 'student_dashboard'])->name('student.dashboard')->middleware('auth');
 
-        Route::get('/mark/{class_code}',[student::class,'mark_attendance'])->name('student.mark.attendance');
+        Route::get('/mark/{class_code}/{dynamic_code}',[student::class,'mark_attendance'])->name('student.mark.attendance');
 
     });
 

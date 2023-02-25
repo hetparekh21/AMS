@@ -9,6 +9,7 @@ use App\Http\Controllers\apis\subjects_api ;
 use App\Http\Controllers\apis\classes_api ;
 use App\Http\Controllers\apis\student_api;
 use App\Http\Controllers\apis\templates_api ;
+use App\Http\Controllers\apis\dynamic_qr ;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,8 @@ use App\Http\Controllers\apis\templates_api ;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::any('/dynamic_qr/{class_code}', [dynamic_qr::class,'dynamic_qr'])->name('dynamic_qr');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
