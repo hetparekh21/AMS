@@ -9,7 +9,7 @@
         @if ($user_role != 1)
             <x-teacher_menu_items dashboard="" class="" attendance="" subject="" student="active" />
         @else
-            <x-admin_menu_items dashboard="" attendance="active" subject="" />
+            <x-admin_menu_items dashboard="" attendance="active" subject="" course="" />
         @endif
     @endpush
 

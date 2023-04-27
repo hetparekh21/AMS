@@ -17,6 +17,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class subjects extends Model
 {
+
+    public $timestamps = false;
+    
     /**
      * The primary key for the model.
      * 

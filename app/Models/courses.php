@@ -14,6 +14,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class courses extends Model
 {
+
+    public $timestamps = false;
+
     /**
      * The primary key for the model.
      * 
@@ -24,7 +27,7 @@ class courses extends Model
     /**
      * @var array
      */
-    protected $fillable = ['course_fees', 'course_name', 'course_code'];
+    protected $fillable = ['course_fees', 'course_name', 'course_code','semesters'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -39,6 +42,6 @@ class courses extends Model
      */
     public function subjects()
     {
-        return $this->hasMany('App\Models\Subject', null, 'course_id');
+        return $this->hasMany('App\Models\Subjects', 'course_id', 'course_id');
     }
 }

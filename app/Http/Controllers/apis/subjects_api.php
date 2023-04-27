@@ -42,4 +42,12 @@ class subjects_api extends Controller
 
         return response()->json($subjects);
     }
+
+    public function get_subjects_plain(){
+
+        $subjects = subjects::where("course_id",null)->get(["subject_id","subject_name"]);
+        return response()->json($subjects);
+
+    }
+
 }

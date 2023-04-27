@@ -6,17 +6,18 @@ use Illuminate\View\Component;
 
 class admin_menu_items extends Component
 {
-    public $dashboard , $attendance ,$subject;
+    public $dashboard , $attendance ,$subject , $course;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($dashboard , $attendance,$subject)
+    public function __construct($dashboard , $attendance, $subject, $course)
     {
         $this->dashboard = $dashboard;
         $this->attendance = $attendance;
         $this->subject = $subject;
+        $this->course = $course;
     }
 
     /**

@@ -9,7 +9,7 @@
         @if ($user_role != 1)
             <x-teacher_menu_items dashboard="" class="" attendance="active" subject="" student=""/>
         @else
-            <x-admin_menu_items dashboard="" attendance="active" />
+            <x-admin_menu_items dashboard="" attendance="active" course="" subject="" />
         @endif
     @endpush
 @endsection
@@ -51,13 +51,6 @@
                             data-bs-target="#navs-justified-profile" aria-controls="navs-justified-profile"
                             aria-selected="false">
                             <i class="tf-icons bx bxs-user-x"></i> Absent
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button type="button" class="nav-link" role="tab" id="suspicious_tab" data-bs-toggle="tab"
-                            data-bs-target="#navs-justified-messages" aria-controls="navs-justified-messages"
-                            aria-selected="false">
-                            <i class="tf-icons bx bx-current-location"></i> Suspicious
                         </button>
                     </li>
                 </ul>
@@ -151,60 +144,6 @@
                         </div>
                     </div>
 
-
-                    <div class="tab-pane fade" id="navs-justified-messages" role="tabpanel">
-                        @error('id_suspicious')
-                            <span class="text-danger">No Students Selected</span>
-                        @enderror
-                        <div class="table-responsive text-nowrap h-100">
-                            <table class="table">
-                                <form method="POST" action="{{ route('attendance.mark.from_suspicious') }}">
-                                    <input type="hidden" name="class_id" value="{{ $class_id }}">
-                                    @csrf
-                                    <div class="mx-4 my-2">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="check_all_suspicious"
-                                                id="check_all_suspicious">
-                                            <label class="form-check-label" for="check_all_suspicious"> Check All </label>
-
-                                            <button class="btn rounded-pill btn-primary ms-5" name="present"
-                                                value="present" type="submit"><span><i
-                                                        class="tf-icons bx bxs-user-check"></i></span> Mark
-                                                Present</button>
-
-                                            <button class="btn rounded-pill btn-primary ms-5" name="absent"
-                                                value="absent" type="submit"><span><i
-                                                        class="tf-icons bx bxs-user-x"></i></span> Mark
-                                                Absent</button>
-                                        </div>
-
-                                    </div>
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Roll no.</th>
-                                            <th>Student Name</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($attendance as $data)
-                                            @if ($data['attendance'] == 2)
-                                                <tr>
-                                                    <td><input class="form-check-input check_box_suspicious"
-                                                            type="checkbox" name="id_suspicious[]"
-                                                            value="{{ $data['id'] }}">
-                                                    </td>
-                                                    <td>{{ $data['id'] }}</td>
-                                                    <td>{{ $data['name'] }}</td>
-                                                </tr>
-                                            @endif
-                                        @endforeach
-                                    </tbody>
-                                </form>
-                            </table>
-                        </div>
-                    </div>
-
                     <div class="d-flex justify-content-center align-items-center">
                         {{ $attendance->links() }}
                     </div>
@@ -285,13 +224,13 @@
 
 
             var options = {
-                colors: ['#00e396', '#fc586e', '#8592a3'],
-                series: [{{ $present }}, {{ $absent }}, {{ $suspicious }}],
+                colors: ['#00e396', '#fc586e'],
+                series: [{{ $present }}, {{ $absent }} ],
                 chart: {
                     width: 380,
                     type: 'pie',
                 },
-                labels: ['Present', 'Absent', 'Suspicious'],
+                labels: ['Present', 'Absent'],
                 responsive: [{
                     breakpoint: 480,
                     options: {

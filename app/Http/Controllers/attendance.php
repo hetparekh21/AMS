@@ -62,15 +62,12 @@ class attendance extends Controller
         // for pie chart
         $present = 0;
         $absent = 0;
-        $suspicious = 0;
 
         foreach ($attendance_whole as $data) {
             if ($data == 1) {
                 $present++;
             } else if ($data == 0) {
                 $absent++;
-            } else if ($data == 2) {
-                $suspicious++;
             }
         }
 
@@ -95,7 +92,7 @@ class attendance extends Controller
 
         $attendance = $c->paginate(10);
 
-        return view('attendance.class_attendance', compact('attendance', 'present', 'absent', 'suspicious', 'class', 'class_id', 'user_role'));
+        return view('attendance.class_attendance', compact('attendance', 'present', 'absent', 'class', 'class_id', 'user_role'));
     }
 
     public function mark_absent(Request $req)
