@@ -6,6 +6,7 @@ use App\Http\Controllers\login;
 use App\Http\Controllers\course;
 use App\Http\Controllers\student;
 use App\Http\Controllers\teacher;
+use App\Http\Controllers\subject;
 use App\Http\Controllers\attendance;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +41,12 @@ Route::middleware('guard_admin')->group(function () {
 
         Route::get('/course', [admin::class, 'admin_course'])->name('admin.course');
 
+        Route::get('/subject', [admin::class, 'admin_subject'])->name('admin.subject');
+
+        Route::get('/teacher', [admin::class, 'admin_teacher'])->name('admin.teacher');
+
+        Route::any('/student', [admin::class, 'admin_student'])->name('admin.student');
+
         Route::get('/manage_course/{course_id}', [course::class, 'manage_course'])->name('course.manage');
 
     });
@@ -57,6 +64,40 @@ Route::middleware('guard_admin')->group(function () {
         Route::post('/add_subject', [course::class, 'add_subject'])->name('course.subject.add');
 
     });
+
+    Route::group(['prefix' => '/subject'], function () {
+
+        Route::post('/create', [subject::class, 'create_subject'])->name('subject.create');
+
+        Route::post('/edit', [subject::class, 'edit_subject'])->name('subject.edit');
+
+        Route::get('/delete/{subject_id}', [subject::class, 'delete_subject'])->name('subject.delete');
+    });
+
+    Route::group(['prefix' => '/student'], function () {
+
+        Route::post('/create_student', [student::class, 'create_student'])->name('student.create');
+
+        Route::post('/edit_student', [student::class, 'edit_student'])->name('student.edit');
+
+        Route::get('/delete_student/{student_id}', [student::class, 'delete_student'])->name('student.delete');
+    });
+
+    Route::group(['prefix' => '/teacher'], function () {
+
+        Route::post('/create', [teacher::class, 'create_teacher'])->name('teacher.create');
+
+        Route::post('/edit', [teacher::class, 'edit_teacher'])->name('teacher.edit');
+
+        Route::get('/delete/{teacher_id}', [teacher::class, 'delete_teacher'])->name('teacher.delete');
+
+        Route::post('/assign_subject', [teacher::class, 'assign_subject'])->name('teacher.assign.subject');
+
+        Route::post('/remove_subject', [teacher::class, 'remove_subject'])->name('teacher.subject.remove');
+
+    });
+
+
 });
 
 // Student Routes
@@ -64,7 +105,7 @@ Route::middleware('guard_student')->group(function () {
 
     Route::group(['prefix' => '/student'], function () {
 
-        Route::get('/', [student::class, 'student_dashboard'])->name('student.dashboard')->middleware('auth');
+        Route::get('/{student_id?}', [student::class, 'student_dashboard'])->name('student.dashboard');
 
         Route::get('/mark/{class_code}/{dynamic_code}', [student::class, 'mark_attendance'])->name('student.mark.attendance');
     });

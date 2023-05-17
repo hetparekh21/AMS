@@ -14,7 +14,7 @@ class login extends Controller
         //check if user is already loggedin
 
         if (Auth::check()) {
-            return login::sort_user();
+            return self::sort_user();
         }
 
         return view('login');
@@ -26,8 +26,7 @@ class login extends Controller
         if (Auth::attempt(['email' => $req->email, 'password' => $req->password])) {
 
             session()->regenerate();
-
-            return login::sort_user();
+            return self::sort_user();
         } else {
 
             return back()->withErrors([

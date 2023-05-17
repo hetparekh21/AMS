@@ -18,6 +18,7 @@ let config = {
     danger: '#ff3e1d',
     dark: '#233446',
     black: '#000',
+    lightpurple: '#d3b8ff',
     white: '#fff',
     body: '#f4f5fb',
     headingColor: '#566a7f',

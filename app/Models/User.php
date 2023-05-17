@@ -9,7 +9,6 @@ use Illuminate\Notifications\Notifiable;
 /**
  * @property integer $id
  * @property integer $role_id
- * @property string $name
  * @property string $email
  * @property string $email_verified_at
  * @property string $password
@@ -24,10 +23,12 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    public $timestamps = false;
+
     /**
      * @var array
      */
-    protected $fillable = ['role_id', 'name', 'email', 'created_at', 'updated_at'];
+    protected $fillable = ['role_id','email','pass_'];
 
 
     /**
@@ -38,15 +39,6 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
     ];
 
     /**

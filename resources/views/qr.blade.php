@@ -21,7 +21,7 @@
                             <div class="col-md-5"> --}}
                     <div class="text-center">
                         <h1>QR</h1>
-                        <p>Scan this QR code to join the class</p>
+                        <p>Scan this QR code to join the class {{$code}}</p>
                         <div id="qr"></div>
                         {{-- {{  QrCode::size(300)->generate(session('message')); }} --}}
                     </div>
@@ -41,7 +41,8 @@
 
     // write a function to close the window after a minute
     setTimeout(function() {
-        window.close();
+        // wait till the functin is called
+        clear_mapper_data();
     }, Timer);
 
     // write a function to print "Hello" every 30 seconds
@@ -57,6 +58,17 @@
             success: function(data) {
                 console.log(data);
                 $("#qr").html(data);
+            }
+        });
+    }
+
+    function clear_mapper_data() {
+        $.ajax({
+            url: '{{ route('clear.mapper', $code) }}',
+            type: 'get',
+            success: function(data) {
+                console.log('data cleared');
+                window.close();
             }
         });
     }

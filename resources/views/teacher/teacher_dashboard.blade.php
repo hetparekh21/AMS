@@ -217,7 +217,7 @@
         'use strict';
 
         (function() {
-            let cardColor, headingColor, axisColor, shadeColor, borderColor, data, length, second;
+            let cardColor, headingColor, axisColor, shadeColor, borderColor, data, length, second,third;
 
             cardColor = config.colors.white;
             headingColor = config.colors.headingColor;
@@ -225,22 +225,24 @@
             borderColor = config.colors.borderColor;
             shadeColor = '#696cff';
 
-            // {{-- second = [{{ $total_stu_str }}] --}}
+            second = [{{ $total_class }}]
+            data = [{{ $avg }}];
+            third = [{{ $total_stu_str }}]
 
-            data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
             length = data.length - 1;
 
             const piechart = document.querySelector('#incomeChart'),
                 piechartConfig = {
                     series: [{
-                            name: "Average",
-                            data: data
-                        },
-                        //  {
-                        //     name: "Total Students",
-                        //     data: second
-                        // }
-                    ],
+                        name: "Classes Conducted",
+                        data: second
+                    }, {
+                        name: "Average Attended",
+                        data: data
+                    }, {
+                        name: "Total Students",
+                        data: third
+                    }],
                     chart: {
                         height: 215,
                         parentHeightOffset: 0,
@@ -282,7 +284,7 @@
                             size: 7
                         }
                     },
-                    colors: [config.colors.primary, config.colors.secondary],
+                    colors: [config.colors.primary, config.colors.secondary,config.colors.lightpurple],
                     fill: {
                         type: 'gradient',
                         gradient: {
@@ -305,7 +307,8 @@
                     },
                     xaxis: {
                         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov',
-                            'Dec'],
+                            'Dec'
+                        ],
                         axisBorder: {
                             show: false
                         },

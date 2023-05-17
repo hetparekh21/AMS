@@ -23,21 +23,26 @@ class student_api extends Controller
 
             $students = DB::select('SELECT
             DISTINCT(stu.roll_no),
+            stu.student_id,
+            stu.uid,
+            us.email,
+            us.pass_,
             stu.student_name,
             c.course_name,
             se.semester_name
             FROM
             students stu join courses c on stu.course_id = c.course_id
+            JOIN users us ON stu.uid = us.id
             join subjects s on s.course_id = c.course_id
-            join semesters se on se.semester_id = s.semester_id
+            join semesters se on se.semester_id = stu.semester_id
             join sub_tech st on st.subject_id = s.subject_id 
             join teachers t on t.teacher_id = st.teacher_id
             WHERE
-            stu.roll_no 
-            LIKE "%' . $query . '%" OR stu.student_name 
-            LIKE "' . $query . '%" OR s.subject_name 
-            LIKE "%' . $query . '%" OR se.semester_name 
-            LIKE "%' . $query . '%" OR c.course_name ;');
+            stu.roll_no LIKE "%' . $query . '%" 
+            OR us.email LIKE "' . $query . '%" 
+            OR stu.student_name LIKE "' . $query . '%" 
+            OR s.subject_name LIKE "%' . $query . '%" 
+            OR se.semester_name LIKE "%' . $query . '%" OR c.course_name ;');
             
         } else {
 
@@ -45,12 +50,13 @@ class student_api extends Controller
             a.roll_no,
             a.student_name,
             a.course_name,
-            a.semester_name
+            a.semester_name,
+            a.uid
         FROM
             (
-            SELECT DISTINCT
-                (stu.roll_no),
+            SELECT DISTINCT(stu.uid),
                 stu.student_name,
+                stu.roll_no,
                 c.course_name,
                 se.semester_name
             FROM
@@ -60,7 +66,7 @@ class student_api extends Controller
             JOIN subjects s ON
                 s.course_id = c.course_id
             JOIN semesters se ON
-                se.semester_id = s.semester_id
+                se.semester_id = stu.semester_id
             JOIN sub_tech st ON
                 st.subject_id = s.subject_id
             JOIN teachers t ON
@@ -72,6 +78,40 @@ class student_api extends Controller
             a.roll_no LIKE "%'.$query.'%" OR a.student_name LIKE "'.$query.'%" OR a.semester_name LIKE "%'.$query.'%" OR a.course_name LIKE "'.$query.'%";');
         }
 
+        // dump($students);die;
+
         return response()->json($students);
     }
+
+    public function get_student_by_id(Request $req ,$student_id = null){
+
+        if($student_id == null){
+            $student_id = $req->input('student_id');
+        }
+
+        if($student_id != null || $student_id != ""){
+            
+            $student = DB::select('SELECT
+            DISTINCT(stu.roll_no),
+            stu.student_id,
+            us.email,
+            us.pass_,
+            stu.student_name,
+            c.course_id,
+            c.course_name,
+            se.semester_name,
+            se.semester_id
+            FROM
+            students stu join courses c on stu.course_id = c.course_id
+            JOIN users us ON stu.uid = us.id
+            join subjects s on s.course_id = c.course_id
+            join semesters se on se.semester_id = stu.semester_id
+            join sub_tech st on st.subject_id = s.subject_id 
+            join teachers t on t.teacher_id = st.teacher_id
+            WHERE
+            stu.student_id = '. $student_id .';');
+    
+        }
+            return response()->json($student);
+    } 
 }

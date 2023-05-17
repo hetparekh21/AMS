@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\apis;
+
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
@@ -43,11 +44,26 @@ class subjects_api extends Controller
         return response()->json($subjects);
     }
 
-    public function get_subjects_plain(){
+    public function get_available_subjects()
+    {
 
-        $subjects = subjects::where("course_id",null)->get(["subject_id","subject_name"]);
+        $subjects = subjects::where("course_id", null)->get(["subject_id", "subject_name"]);
         return response()->json($subjects);
-
     }
 
+    public function get_subject_by_id(Request $request,$id = null)
+    {
+
+        if($id == null){
+            $id = $request->input("subject_id");
+        }
+
+        if ($id == null) {
+            $subject = subjects::get();
+        } else {
+            $subject = subjects::leftjoin("sub_tech","sub_tech.subject_id","subjects.subject_id")->where("subjects.subject_id", $id)->get(['subjects.*','sub_tech.teacher_id']);
+        }
+
+        return response()->json($subject);
+    }
 }

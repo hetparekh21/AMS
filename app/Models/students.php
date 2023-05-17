@@ -17,6 +17,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class students extends Model
 {
+
+    public $timestamps = false;
+
     /**
      * The primary key for the model.
      * 

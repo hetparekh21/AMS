@@ -9,7 +9,7 @@
         @if ($user_role != 1)
             <x-teacher_menu_items dashboard="" class="" attendance="" subject="" student="active" />
         @else
-            <x-admin_menu_items dashboard="" attendance="active" subject="" course="" />
+            <x-admin_menu_items dashboard="" attendance="active" subject="" course="" teacher="" student="" />
         @endif
     @endpush
 
@@ -54,15 +54,8 @@
                                                 <i class="bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item"
-                                                    href=""><i
-                                                        class="bx bx-edit-alt me-1"></i> Attendance</a>
-                                                <a class="dropdown-item"
-                                                    href=""><i
-                                                        class="bx bxs-file-export"></i> Export Attendance</a>
-                                                <a class="dropdown-item" target=" _blank"
-                                                    href=""><i
-                                                        class="bx bx-qr-scan me-1"></i> Show QR</a>
+                                                <a class="dropdown-item" href="{{route('student.dashboard',$data['uid'])}}"><i class="bx bx-edit-alt me-1"></i>
+                                                    Attendance</a>
                                             </div>
                                         </div>
                                     </td>

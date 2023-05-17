@@ -306,13 +306,20 @@ class attendance extends Controller
         $user = Auth::user();
         $user_role = $user->role_id;
 
+        $subject = subjects::where('subject_id', $subject_id)->get()->toarray()[0];
+
+        // dump($subject);die;
+
+        if($subject['course_id'] == null){
+            return redirect()->route('admin.subject')->with('notification', ['danger','Subject not assigned to a course yet']);
+        }
+
         $subject_details = subjects::join('courses', 'subjects.course_id', 'courses.course_id')
             ->join('semesters', 'subjects.semester_id', 'semesters.semester_id')
-            ->join('sub_tech', 'sub_tech.subject_id', 'subjects.subject_id')
-            ->join('teachers', 'teachers.teacher_id', 'sub_tech.teacher_id')
-            ->join('users','teachers.uid','users.id')
+            ->leftjoin('sub_tech', 'sub_tech.subject_id', 'subjects.subject_id')
+            ->leftjoin('teachers', 'teachers.teacher_id', 'sub_tech.teacher_id')
             ->where('subjects.subject_id', $subject_id)
-            ->get(['subject_name', 'semester_name', 'course_name', 'users.name'])->toarray();
+            ->get(['subject_name', 'semester_name', 'course_name', 'teachers.teacher_name'])->toarray();
 
         $total_classes = classes::where('subject_id', $subject_id)->count() ;
 
@@ -355,6 +362,7 @@ class attendance extends Controller
         $response = Route::dispatch($resuest);
         $students = json_decode($response->getContent(), true);
 
+        // dump($students);die;
 
         $c = new Collection($students);
         $students = $c->paginate(10);

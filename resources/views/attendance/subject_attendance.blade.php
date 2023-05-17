@@ -9,7 +9,7 @@
         @if ($user_role != 1)
             <x-teacher_menu_items dashboard="" class="" attendance="" subject="active" student="" />
         @else
-            <x-admin_menu_items dashboard="" attendance="" subject="active" course="" />
+            <x-admin_menu_items dashboard="" attendance="" subject="active" course="" teacher="" student="" />
         @endif
     @endpush
 @endsection
@@ -63,7 +63,7 @@
                     <div class="card-body">
 
                         <a><span class="card-title text-primary h5"> Teacher : </span><span
-                                class="fw-bold h5">{{ $subject_details[0]['name'] }}</span></a>
+                                class="fw-bold h5">{{ $subject_details[0]['teacher_name'] != null ? $subject_details[0]['teacher_name'] : 'Not Assigned' }}</span></a>
 
                     </div>
                 </div>
@@ -284,4 +284,5 @@
             }
         })();
     </script>
+    @include('notify')
 @endsection

@@ -7,9 +7,9 @@
 
     @push('menu-items')
         @if ($user_role != 1)
-            <x-teacher_menu_items dashboard="" class="" attendance="active" subject="" student=""/>
+            <x-teacher_menu_items dashboard="" class="" attendance="active" subject="" student="" />
         @else
-            <x-admin_menu_items dashboard="" attendance="active" course="" subject="" />
+            <x-admin_menu_items dashboard="" attendance="active" subject="" course="" teacher="" student="" />
         @endif
     @endpush
 @endsection
@@ -225,7 +225,7 @@
 
             var options = {
                 colors: ['#00e396', '#fc586e'],
-                series: [{{ $present }}, {{ $absent }} ],
+                series: [{{ $present }}, {{ $absent }}],
                 chart: {
                     width: 380,
                     type: 'pie',

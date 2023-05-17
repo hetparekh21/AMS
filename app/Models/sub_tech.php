@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class sub_tech extends Model
 {
+    public $timestamps = false;
+
     /**
      * The table associated with the model.
      * 
@@ -22,7 +24,7 @@ class sub_tech extends Model
     /**
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = ['subject_id','teacher_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

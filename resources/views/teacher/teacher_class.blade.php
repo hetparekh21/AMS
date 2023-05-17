@@ -213,7 +213,7 @@
             var course_id = $('#course_' + id).val();
             console.log(course_id);
             $.ajax({
-                url: "{{ route('get.semester') }}",
+                url: "{{ route('get.semester',0) }}",
                 method: "get",
                 data: {
                     course_id: course_id,
