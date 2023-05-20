@@ -1,4 +1,4 @@
-<p align="center"><img src="public/assets/img/favicon/favicon.ico" width="100" alt="AMS Logo">AMS</p>
+<p align="center"><img src="public/assets/img/favicon/favicon.ico" width="50" alt="AMS Logo">AMS</p>
 
 ## About AMS
 
