@@ -1,4 +1,4 @@
-<p align="center"><img src="/public/favicon.ico" width="400" alt="AMS Logo">AMS</p>
+<p align="center"><img src="public/favicon.ico" width="400" alt="AMS Logo">AMS</p>
 
 ## About AMS
 
@@ -11,13 +11,15 @@ The project focuses on resolving the following key challenges:
 
 - Accessibility and User Experience: The system offers cross-platform accessibility and ensures a user-friendly experience across different devices and operating systems. This allows users to access the system seamlessly, enhancing usability and convenience.
 
-## Learning Laravel
+## ER Diagram and Scrennshots 
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+![ER Diagram](public/assets/ER_diagram.png "ER Diagram")
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+![Teacher Class](public/assets/teacher_class.png "Teacher Class")
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+![Class Attendance](public/assets/teacher_class_attendance.png "Class Attendance Page")
+
+![Subject Attendance](public/assets/subject_attendance.png "Subject Attendance Page")
 
 ## Tech-Stack
 
