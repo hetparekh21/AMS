@@ -1,5 +1,5 @@
 <p align="center"><img src="public/assets/img/favicon/favicon.ico" width="20" alt="AMS Logo">AMS</p>
-
+===
 ## About AMS
 
 The QR attendance management system project aims to develop an automated and efficient solution to revolutionize attendance tracking in educational institutions. The traditional manual processes are prone to errors, time-consuming, and lack real-time analysis capabilities. By leveraging Quick Response (QR) codes and advanced technology, the project intends to simplify attendance management, enhance accuracy, and provide administrators with valuable insights for decision-making.
