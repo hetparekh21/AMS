@@ -11,7 +11,7 @@ The project focuses on resolving the following key challenges:
 
 - Accessibility and User Experience: The system offers cross-platform accessibility and ensures a user-friendly experience across different devices and operating systems. This allows users to access the system seamlessly, enhancing usability and convenience.
 
-## ER Diagram and Scrennshots 
+## ER Diagram and Screenshots 
 
 ![ER Diagram](public/assets/ER_diagram.png "ER Diagram")
 
