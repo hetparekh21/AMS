@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.1deb5ubuntu1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 18, 2023 at 07:23 AM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 7.4.33
+-- Host: localhost
+-- Generation Time: Dec 04, 2024 at 10:25 PM
+-- Server version: 8.0.40-0ubuntu0.22.04.1
+-- PHP Version: 8.1.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `ams`
 --
-CREATE DATABASE IF NOT EXISTS `ams` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `ams`;
 
 -- --------------------------------------------------------
 
@@ -29,12 +27,9 @@ USE `ams`;
 -- Table structure for table `attendances`
 --
 
-DROP TABLE IF EXISTS `attendances`;
-CREATE TABLE IF NOT EXISTS `attendances` (
-  `att_id` int(11) NOT NULL,
-  `att_name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  UNIQUE KEY `att_id` (`att_id`),
-  UNIQUE KEY `att_name` (`att_name`)
+CREATE TABLE `attendances` (
+  `att_id` int NOT NULL,
+  `att_name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -53,14 +48,11 @@ INSERT INTO `attendances` (`att_id`, `att_name`) VALUES
 -- Table structure for table `att_jsons`
 --
 
-DROP TABLE IF EXISTS `att_jsons`;
-CREATE TABLE IF NOT EXISTS `att_jsons` (
-  `att_json_id` int(11) NOT NULL AUTO_INCREMENT,
-  `class_id` int(11) NOT NULL,
-  `att_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`att_json`)),
-  PRIMARY KEY (`att_json_id`),
-  KEY `class_id` (`class_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `att_jsons` (
+  `att_json_id` int NOT NULL,
+  `class_id` int NOT NULL,
+  `att_json` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL
+) ;
 
 --
 -- Dumping data for table `att_jsons`
@@ -88,7 +80,8 @@ INSERT INTO `att_jsons` (`att_json_id`, `class_id`, `att_json`) VALUES
 (46, 50, '{\"1\": 1, \"2\": 0, \"3\": 1, \"4\": 1, \"5\": 1}'),
 (47, 51, '{\"1\": 1, \"2\": 1, \"3\": 1, \"4\": 0, \"5\": 0}'),
 (48, 52, '{\"6\": 1, \"7\": 1, \"8\": 1, \"9\": 0, \"10\": 0}'),
-(49, 53, '{}');
+(67, 71, '{\"1\": 1, \"2\": 1, \"3\": 0, \"4\": 0, \"5\": 1}'),
+(68, 72, '{\"1\": 1, \"2\": 1, \"3\": 0, \"4\": 1, \"5\": 1}');
 
 -- --------------------------------------------------------
 
@@ -96,16 +89,12 @@ INSERT INTO `att_jsons` (`att_json_id`, `class_id`, `att_json`) VALUES
 -- Table structure for table `classes`
 --
 
-DROP TABLE IF EXISTS `classes`;
-CREATE TABLE IF NOT EXISTS `classes` (
-  `class_id` int(11) NOT NULL AUTO_INCREMENT,
-  `class_code` varchar(5) NOT NULL,
-  `date` date DEFAULT (CURRENT_DATE),
-  `subject_id` int(11) NOT NULL,
-  PRIMARY KEY (`class_id`),
-  UNIQUE KEY `class_code` (`class_code`),
-  KEY `subject_id` (`subject_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `classes` (
+  `class_id` int NOT NULL,
+  `class_code` varchar(5) COLLATE utf8mb4_general_ci NOT NULL,
+  `date` date DEFAULT (curdate()),
+  `subject_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `classes`
@@ -133,7 +122,9 @@ INSERT INTO `classes` (`class_id`, `class_code`, `date`, `subject_id`) VALUES
 (50, 'oirGp', '2023-02-14', 5),
 (51, 'Srul6', '2023-02-15', 2),
 (52, 'KAeB7', '2023-02-15', 8),
-(53, 'wkH2B', '2023-04-27', 5);
+(53, 'wkH2B', '2023-04-27', 5),
+(71, 'ayHAT', '2024-11-13', 5),
+(72, 'Ulfbr', '2024-11-13', 9);
 
 -- --------------------------------------------------------
 
@@ -141,15 +132,12 @@ INSERT INTO `classes` (`class_id`, `class_code`, `date`, `subject_id`) VALUES
 -- Table structure for table `courses`
 --
 
-DROP TABLE IF EXISTS `courses`;
-CREATE TABLE IF NOT EXISTS `courses` (
-  `course_id` int(11) NOT NULL AUTO_INCREMENT,
-  `course_name` varchar(50) NOT NULL,
-  `course_code` varchar(10) DEFAULT NULL,
-  `semesters` tinyint(4) NOT NULL,
-  PRIMARY KEY (`course_id`),
-  UNIQUE KEY `course_code` (`course_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='This table stores the information about courses';
+CREATE TABLE `courses` (
+  `course_id` int NOT NULL,
+  `course_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `course_code` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `semesters` tinyint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='This table stores the information about courses';
 
 --
 -- Dumping data for table `courses`
@@ -165,34 +153,49 @@ INSERT INTO `courses` (`course_id`, `course_name`, `course_code`, `semesters`) V
 -- Table structure for table `dynamic_mappers`
 --
 
-DROP TABLE IF EXISTS `dynamic_mappers`;
-CREATE TABLE IF NOT EXISTS `dynamic_mappers` (
-  `class_code` varchar(5) NOT NULL,
-  `dynamic_code` varchar(5) NOT NULL,
-  `Timestamp` timestamp DEFAULT CURRENT_TIMESTAMP,
-  KEY `class_code` (`class_code`)
+CREATE TABLE `dynamic_mappers` (
+  `class_code` varchar(5) COLLATE utf8mb4_general_ci NOT NULL,
+  `dynamic_code` varchar(5) COLLATE utf8mb4_general_ci NOT NULL,
+  `Timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `dynamic_mappers`
+-- Table structure for table `migrations`
 --
 
-INSERT INTO `dynamic_mappers` (`class_code`, `dynamic_code`, `Timestamp`) VALUES
-('ABCDE', '0KZL1', '2023-02-19 14:44:04'),
-('ABCDE', 'LuW6Z', '2023-02-19 16:34:52'),
-('ABCDE', 'yUmQh', '2023-02-20 04:37:34'),
-('ABCDE', 'WgPpv', '2023-02-20 04:38:04'),
-('ABCDE', 'uIxhZ', '2023-02-20 04:38:35'),
-('ABCDE', 'cMBfQ', '2023-02-20 04:39:04'),
-('ABCDE', '3o8aL', '2023-02-20 04:39:30'),
-('ABCDE', 'TGZKY', '2023-02-20 04:40:00'),
-('ABCDE', 'yA4wS', '2023-02-20 04:40:30'),
-('ABCDE', 'pY7sQ', '2023-02-20 04:41:00'),
-('ABCDE', '8yD7Q', '2023-02-20 04:41:30'),
-('wkH2B', 'I2XBW', '2023-04-27 17:56:19'),
-('wkH2B', 'XLogP', '2023-04-27 17:56:49'),
-('wkH2B', 'V8f2N', '2023-04-27 17:57:19'),
-('wkH2B', 'JbwQt', '2023-04-27 17:57:49');
+CREATE TABLE `migrations` (
+  `id` int UNSIGNED NOT NULL,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `migrations`
+--
+
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+(1, '2019_12_14_000001_create_personal_access_tokens_table', 1),
+(2, '2024_11_12_103738_create_sessions_table', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `personal_access_tokens`
+--
+
+CREATE TABLE `personal_access_tokens` (
+  `id` bigint UNSIGNED NOT NULL,
+  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text COLLATE utf8mb4_unicode_ci,
+  `last_used_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -200,12 +203,10 @@ INSERT INTO `dynamic_mappers` (`class_code`, `dynamic_code`, `Timestamp`) VALUES
 -- Table structure for table `role`
 --
 
-DROP TABLE IF EXISTS `role`;
-CREATE TABLE IF NOT EXISTS `role` (
-  `role_id` int(11) NOT NULL AUTO_INCREMENT,
-  `role_name` varchar(20) NOT NULL,
-  PRIMARY KEY (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `role` (
+  `role_id` int NOT NULL,
+  `role_name` varchar(20) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `role`
@@ -222,12 +223,10 @@ INSERT INTO `role` (`role_id`, `role_name`) VALUES
 -- Table structure for table `semesters`
 --
 
-DROP TABLE IF EXISTS `semesters`;
-CREATE TABLE IF NOT EXISTS `semesters` (
-  `semester_id` int(11) NOT NULL AUTO_INCREMENT,
-  `semester_name` varchar(20) NOT NULL,
-  PRIMARY KEY (`semester_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='This table stores the information about Semesters';
+CREATE TABLE `semesters` (
+  `semester_id` int NOT NULL,
+  `semester_name` varchar(20) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='This table stores the information about Semesters';
 
 --
 -- Dumping data for table `semesters`
@@ -248,22 +247,39 @@ INSERT INTO `semesters` (`semester_id`, `semester_name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sessions`
+--
+
+CREATE TABLE `sessions` (
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` text COLLATE utf8mb4_unicode_ci,
+  `payload` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_activity` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `sessions`
+--
+
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
+('W3cKA0ubhocQc7W4ERsUp6AjKXELlDF2NEHZpkkl', 12, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoicmtRb0tGd2g2ZTU2ZmtZcUlNaEsydEdscXZrT3R0VVp1NkRCREduViI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzU6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC90ZWFjaGVyL2NsYXNzIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTI7fQ==', 1733331238);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `students`
 --
 
-DROP TABLE IF EXISTS `students`;
-CREATE TABLE IF NOT EXISTS `students` (
-  `uid` bigint(20) UNSIGNED NOT NULL,
-  `student_id` int(11) NOT NULL AUTO_INCREMENT,
-  `roll_no` int(11) NOT NULL,
-  `student_name` varchar(50) NOT NULL,
-  `semester_id` int(11) NOT NULL,
-  `course_id` int(11) NOT NULL,
-  PRIMARY KEY (`student_id`),
-  KEY `semester_id` (`semester_id`),
-  KEY `course_id` (`course_id`),
-  KEY `uid` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `students` (
+  `uid` bigint UNSIGNED NOT NULL,
+  `student_id` int NOT NULL,
+  `roll_no` int NOT NULL,
+  `student_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `semester_id` int NOT NULL,
+  `course_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `students`
@@ -287,18 +303,13 @@ INSERT INTO `students` (`uid`, `student_id`, `roll_no`, `student_name`, `semeste
 -- Table structure for table `subjects`
 --
 
-DROP TABLE IF EXISTS `subjects`;
-CREATE TABLE IF NOT EXISTS `subjects` (
-  `subject_id` int(11) NOT NULL AUTO_INCREMENT,
-  `subject_name` varchar(255) NOT NULL,
-  `course_id` int(11) DEFAULT NULL,
-  `subject_code` varchar(20) NOT NULL,
-  `semester_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`subject_id`),
-  UNIQUE KEY `subject_code` (`subject_code`),
-  KEY `course_id` (`course_id`),
-  KEY `semester_id` (`semester_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `subjects` (
+  `subject_id` int NOT NULL,
+  `subject_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `course_id` int DEFAULT NULL,
+  `subject_code` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `semester_id` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `subjects`
@@ -325,12 +336,9 @@ INSERT INTO `subjects` (`subject_id`, `subject_name`, `course_id`, `subject_code
 -- Table structure for table `sub_tech`
 --
 
-DROP TABLE IF EXISTS `sub_tech`;
-CREATE TABLE IF NOT EXISTS `sub_tech` (
-  `subject_id` int(11) NOT NULL,
-  `teacher_id` int(11) NOT NULL,
-  PRIMARY KEY (`subject_id`,`teacher_id`),
-  KEY `teacher_id` (`teacher_id`)
+CREATE TABLE `sub_tech` (
+  `subject_id` int NOT NULL,
+  `teacher_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -338,11 +346,32 @@ CREATE TABLE IF NOT EXISTS `sub_tech` (
 --
 
 INSERT INTO `sub_tech` (`subject_id`, `teacher_id`) VALUES
-(1, 2),
-(2, 3),
-(3, 4),
+(1, 1),
 (5, 1),
-(8, 3);
+(9, 1),
+(2, 3),
+(8, 3),
+(3, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sus`
+--
+
+CREATE TABLE `sus` (
+  `id` int NOT NULL,
+  `class_code` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `ip` varchar(45) NOT NULL,
+  `student_id` bigint UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `sus`
+--
+
+INSERT INTO `sus` (`id`, `class_code`, `ip`, `student_id`) VALUES
+(1, 'Ulfbr', '10.21.8.189', 1);
 
 -- --------------------------------------------------------
 
@@ -350,14 +379,11 @@ INSERT INTO `sub_tech` (`subject_id`, `teacher_id`) VALUES
 -- Table structure for table `teachers`
 --
 
-DROP TABLE IF EXISTS `teachers`;
-CREATE TABLE IF NOT EXISTS `teachers` (
-  `uid` bigint(20) UNSIGNED NOT NULL,
-  `teacher_id` int(11) NOT NULL AUTO_INCREMENT,
-  `teacher_name` varchar(30) NOT NULL,
-  PRIMARY KEY (`teacher_id`),
-  KEY `uid` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `teachers` (
+  `uid` bigint UNSIGNED NOT NULL,
+  `teacher_id` int NOT NULL,
+  `teacher_name` varchar(30) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `teachers`
@@ -375,15 +401,11 @@ INSERT INTO `teachers` (`uid`, `teacher_id`, `teacher_name`) VALUES
 -- Table structure for table `templates`
 --
 
-DROP TABLE IF EXISTS `templates`;
-CREATE TABLE IF NOT EXISTS `templates` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `subject_id` int(11) NOT NULL,
-  `teacher_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `subject_id` (`subject_id`),
-  KEY `teacher_id` (`teacher_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `templates` (
+  `id` int NOT NULL,
+  `subject_id` int NOT NULL,
+  `teacher_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `templates`
@@ -393,8 +415,7 @@ INSERT INTO `templates` (`id`, `subject_id`, `teacher_id`) VALUES
 (9, 3, 2),
 (16, 5, 1),
 (17, 2, 3),
-(18, 8, 3),
-(19, 1, 1);
+(18, 8, 3);
 
 -- --------------------------------------------------------
 
@@ -402,21 +423,17 @@ INSERT INTO `templates` (`id`, `subject_id`, `teacher_id`) VALUES
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) NOT NULL,
+CREATE TABLE `users` (
+  `id` bigint UNSIGNED NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) NOT NULL,
-  `pass_` varchar(255) NOT NULL,
-  `role_id` int(11) NOT NULL,
-  `remember_token` varchar(100) DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pass_` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role_id` int NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `users_email_unique` (`email`),
-  KEY `role_id` (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
@@ -438,6 +455,217 @@ INSERT INTO `users` (`id`, `email`, `email_verified_at`, `password`, `pass_`, `r
 (14, 'ashok@gmail.com', NULL, '$2y$10$jJRNYyuBptMB94N/81wYsuOVAxZU4P5tCo5SDoGVYVGcmfZo/F6p6', '12345678', 2, NULL, NULL, NULL),
 (15, 'dharmesh@gmail.com', NULL, '$2y$10$jJRNYyuBptMB94N/81wYsuOVAxZU4P5tCo5SDoGVYVGcmfZo/F6p6', '12345678', 2, NULL, NULL, NULL),
 (16, 'admin@gmail.com', NULL, '$2y$10$jJRNYyuBptMB94N/81wYsuOVAxZU4P5tCo5SDoGVYVGcmfZo/F6p6', '12345678', 1, NULL, NULL, NULL);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `attendances`
+--
+ALTER TABLE `attendances`
+  ADD UNIQUE KEY `att_id` (`att_id`),
+  ADD UNIQUE KEY `att_name` (`att_name`);
+
+--
+-- Indexes for table `att_jsons`
+--
+ALTER TABLE `att_jsons`
+  ADD PRIMARY KEY (`att_json_id`),
+  ADD KEY `class_id` (`class_id`);
+
+--
+-- Indexes for table `classes`
+--
+ALTER TABLE `classes`
+  ADD PRIMARY KEY (`class_id`),
+  ADD UNIQUE KEY `class_code` (`class_code`),
+  ADD KEY `subject_id` (`subject_id`);
+
+--
+-- Indexes for table `courses`
+--
+ALTER TABLE `courses`
+  ADD PRIMARY KEY (`course_id`),
+  ADD UNIQUE KEY `course_code` (`course_code`);
+
+--
+-- Indexes for table `dynamic_mappers`
+--
+ALTER TABLE `dynamic_mappers`
+  ADD KEY `class_code` (`class_code`);
+
+--
+-- Indexes for table `migrations`
+--
+ALTER TABLE `migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `personal_access_tokens`
+--
+ALTER TABLE `personal_access_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
+  ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`);
+
+--
+-- Indexes for table `role`
+--
+ALTER TABLE `role`
+  ADD PRIMARY KEY (`role_id`);
+
+--
+-- Indexes for table `semesters`
+--
+ALTER TABLE `semesters`
+  ADD PRIMARY KEY (`semester_id`);
+
+--
+-- Indexes for table `sessions`
+--
+ALTER TABLE `sessions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sessions_user_id_index` (`user_id`),
+  ADD KEY `sessions_last_activity_index` (`last_activity`);
+
+--
+-- Indexes for table `students`
+--
+ALTER TABLE `students`
+  ADD PRIMARY KEY (`student_id`),
+  ADD KEY `semester_id` (`semester_id`),
+  ADD KEY `course_id` (`course_id`),
+  ADD KEY `uid` (`uid`);
+
+--
+-- Indexes for table `subjects`
+--
+ALTER TABLE `subjects`
+  ADD PRIMARY KEY (`subject_id`),
+  ADD UNIQUE KEY `subject_code` (`subject_code`),
+  ADD KEY `course_id` (`course_id`),
+  ADD KEY `semester_id` (`semester_id`);
+
+--
+-- Indexes for table `sub_tech`
+--
+ALTER TABLE `sub_tech`
+  ADD PRIMARY KEY (`subject_id`,`teacher_id`),
+  ADD KEY `teacher_id` (`teacher_id`);
+
+--
+-- Indexes for table `sus`
+--
+ALTER TABLE `sus`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sus_ibfk_2` (`student_id`),
+  ADD KEY `sus_ibfk_1` (`class_code`);
+
+--
+-- Indexes for table `teachers`
+--
+ALTER TABLE `teachers`
+  ADD PRIMARY KEY (`teacher_id`),
+  ADD KEY `uid` (`uid`);
+
+--
+-- Indexes for table `templates`
+--
+ALTER TABLE `templates`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `subject_id` (`subject_id`),
+  ADD KEY `teacher_id` (`teacher_id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD KEY `role_id` (`role_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `att_jsons`
+--
+ALTER TABLE `att_jsons`
+  MODIFY `att_json_id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `classes`
+--
+ALTER TABLE `classes`
+  MODIFY `class_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+
+--
+-- AUTO_INCREMENT for table `courses`
+--
+ALTER TABLE `courses`
+  MODIFY `course_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- AUTO_INCREMENT for table `migrations`
+--
+ALTER TABLE `migrations`
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `personal_access_tokens`
+--
+ALTER TABLE `personal_access_tokens`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `role`
+--
+ALTER TABLE `role`
+  MODIFY `role_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `semesters`
+--
+ALTER TABLE `semesters`
+  MODIFY `semester_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `students`
+--
+ALTER TABLE `students`
+  MODIFY `student_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `subjects`
+--
+ALTER TABLE `subjects`
+  MODIFY `subject_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `sus`
+--
+ALTER TABLE `sus`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `teachers`
+--
+ALTER TABLE `teachers`
+  MODIFY `teacher_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `templates`
+--
+ALTER TABLE `templates`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Constraints for dumped tables
@@ -482,6 +710,13 @@ ALTER TABLE `subjects`
 ALTER TABLE `sub_tech`
   ADD CONSTRAINT `sub_tech_ibfk_1` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`subject_id`),
   ADD CONSTRAINT `sub_tech_ibfk_2` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`teacher_id`);
+
+--
+-- Constraints for table `sus`
+--
+ALTER TABLE `sus`
+  ADD CONSTRAINT `sus_ibfk_1` FOREIGN KEY (`class_code`) REFERENCES `dynamic_mappers` (`class_code`),
+  ADD CONSTRAINT `sus_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `teachers`
