@@ -146,6 +146,8 @@ Route::middleware('guard_teacher')->group(function () {
 
         Route::post('/present', [attendance::class, 'mark_present'])->name('attendance.mark.present');
 
+        Route::post('/sus', [attendance::class, 'mark_sus'])->name('attendance.mark.sus');
+
         Route::post('/from_suspicious', [attendance::class, 'from_suspicious'])->name('attendance.mark.from_suspicious');
 
         Route::get('/export/{class_id}', [attendance::class, 'export'])->name('attendance.export');

@@ -33,4 +33,9 @@ class dynamic_mapper extends Model
     {
         return $this->belongsTo('App\Models\Class', null, 'class_id');
     }
+
+    public function sus(){
+        return $this->hasMany('App\Models\sus');
+    }
+
 }

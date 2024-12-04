@@ -100,7 +100,7 @@ DROP TABLE IF EXISTS `classes`;
 CREATE TABLE IF NOT EXISTS `classes` (
   `class_id` int(11) NOT NULL AUTO_INCREMENT,
   `class_code` varchar(5) NOT NULL,
-  `date` date NOT NULL DEFAULT current_timestamp(),
+  `date` date DEFAULT (CURRENT_DATE),
   `subject_id` int(11) NOT NULL,
   PRIMARY KEY (`class_id`),
   UNIQUE KEY `class_code` (`class_code`),
@@ -169,7 +169,7 @@ DROP TABLE IF EXISTS `dynamic_mappers`;
 CREATE TABLE IF NOT EXISTS `dynamic_mappers` (
   `class_code` varchar(5) NOT NULL,
   `dynamic_code` varchar(5) NOT NULL,
-  `Timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+  `Timestamp` timestamp DEFAULT CURRENT_TIMESTAMP,
   KEY `class_code` (`class_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

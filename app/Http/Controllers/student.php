@@ -9,6 +9,7 @@ use App\Models\courses;
 use App\Models\dynamic_mapper;
 use App\Models\semesters;
 use App\Models\subjects;
+use App\Models\Sus;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -120,8 +121,46 @@ class student extends Controller
                         $status = "danger";
                     } else {
 
-                        $msg .= "Attendance Marked Successfully for " . $class_code;
-                        $status = "success";
+                        $sus = Sus::where('class_code', $class_code)->where('ip', request()->ip())->get();
+
+                        // dd($sus->count());
+
+                        if ($sus->count() != 0) {
+
+                            // dd($sus);
+
+                            foreach ($sus as $s) {
+                                DB::table('att_jsons')
+                                    ->where('class_id', $class_id)
+                                    ->update([
+                                        'att_json' => DB::raw("JSON_SET(att_json" . ',"$.\"' . $s->student_id . '\""' . ",2)")
+                                    ]);
+                            }
+
+                            DB::table('att_jsons')
+                                ->where('class_id', $class_id)
+                                ->update([
+                                    'att_json' => DB::raw("JSON_SET(att_json" . ',"$.\"' . $student_id . '\""' . ",2)")
+                                ]);
+
+                        } else {
+
+                            Sus::create([
+                                'class_code' => $class_code,
+                                'ip' => request()->ip(),
+                                'student_id' => $student->uid,
+                            ]);
+
+                            DB::table('att_jsons')
+                                ->where('class_id', $class_id)
+                                ->update([
+                                    'att_json' => DB::raw("JSON_SET(att_json" . ',"$.\"' . $student_id . '\""' . ",1)")
+                                ]);
+                            $msg .= "Attendance Marked Successfully for " . $class_code;
+                            $status = "success";
+                        }
+
+                        // dd($class_id,$student_id);
 
                     }
 

@@ -53,6 +53,13 @@
                             <i class="tf-icons bx bxs-user-x"></i> Absent
                         </button>
                     </li>
+                    <li class="nav-item">
+                        <button type="button" class="nav-link" role="tab" id="sus_tab" data-bs-toggle="tab"
+                            data-bs-target="#navs-justified-sus" aria-controls="navs-justified-sus"
+                            aria-selected="false">
+                            <i class='bx bx-question-mark'></i> Suspicious
+                        </button>
+                    </li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="navs-justified-home" role="tabpanel">
@@ -133,6 +140,54 @@
                                                 <tr>
                                                     <td><input class="form-check-input check_box_absent" type="checkbox"
                                                             name="id_absent[]" value="{{ $data['id'] }}"></td>
+                                                    <td>{{ $data['id'] }}</td>
+                                                    <td>{{ $data['name'] }}</td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
+                                    </tbody>
+                                </form>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="navs-justified-sus" role="tabpanel">
+                        @error('id_sus')
+                            <span class="text-danger">No Students Selected</span>
+                        @enderror
+                        <div class="table-responsive text-nowrap h-100">
+                            <table class="table">
+                                <form method="POST" action="{{ route('attendance.mark.sus') }}">
+                                    <input type="hidden" name="class_id" value="{{ $class_id }}">
+                                    @csrf
+                                    <div class="mx-4 my-2">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input form-check-inline"
+                                                name="check_all_sus" id="check_all_sus">
+                                            <label class="form-check-label" for="check_all_sus"> Check All </label>
+
+                                            <button class="btn rounded-pill btn-primary ms-5" name="present" value="present"
+                                                type="submit"><span><i class="tf-icons bx bxs-user-check"></i></span> Mark
+                                                Present</button>
+
+                                            <button class="btn rounded-pill btn-primary ms-5" name="absent" value="absent"
+                                                type="submit"><span><i class="tf-icons bx bxs-user-x"></i></span> Mark
+                                                Absent</button>
+                                        </div>
+
+                                    </div>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Roll no.</th>
+                                            <th>Student Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($attendance as $data)
+                                            @if ($data['attendance'] == 2)
+                                                <tr>
+                                                    <td><input class="form-check-input check_box_sus" type="checkbox"
+                                                            name="id_array[]" value="{{ $data['id'] }}"></td>
                                                     <td>{{ $data['id'] }}</td>
                                                     <td>{{ $data['name'] }}</td>
                                                 </tr>
@@ -224,13 +279,13 @@
 
 
             var options = {
-                colors: ['#00e396', '#fc586e'],
-                series: [{{ $present }}, {{ $absent }}],
+                colors: ['#00e396', '#fc586e', '#fcba03', '#4287f5'],
+                series: [{{ $present }}, {{ $absent }}, {{ $sus }}, {{ $leave }}],
                 chart: {
                     width: 380,
                     type: 'pie',
                 },
-                labels: ['Present', 'Absent'],
+                labels: ['Present', 'Absent', 'Suspicious', 'On Leave'],
                 responsive: [{
                     breakpoint: 480,
                     options: {
@@ -301,5 +356,22 @@
                 $("#check_all_absent").prop('checked', true);
             }
         });
+
+        // check all checkboxex on click of the check all checkbox
+        $("#check_all_sus").click(function() {
+            $('.check_box_sus').not(this).prop('checked', this.checked);
+        });
+
+        // uncheck the check all checkbox if any of the checkboxes are unchecked
+        $('.check_box_sus').change(function() {
+            if (false == $(this).prop("checked")) { //if this item is unchecked
+                $("#check_all_sus").prop('checked', false); //change "select all" checked status to false
+            }
+            //check "select all" if all checkbox items are checked
+            if ($('.check_box_sus:checked').length == $('.check_box_sus').length) {
+                $("#check_all_sus").prop('checked', true);
+            }
+        });
+
     </script>
 @endsection

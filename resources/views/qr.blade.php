@@ -40,15 +40,14 @@
     get_qr();
 
     // write a function to close the window after a minute
-    setTimeout(function() {
-        // wait till the functin is called
-        clear_mapper_data();
-    }, Timer);
+    // setTimeout(function() {
+    //     // wait till the function is called
+    //     clear_mapper_data();
+    // }, Timer);
 
-    // write a function to print "Hello" every 30 seconds
     setInterval(function() {
         get_qr();
-    }, 30000);
+    }, 5000);
 
     function get_qr() {
         // use ajax to call the controller
@@ -62,6 +61,7 @@
         });
     }
 
+    // You can use this is cron job
     function clear_mapper_data() {
         $.ajax({
             url: '{{ route('clear.mapper', $code) }}',

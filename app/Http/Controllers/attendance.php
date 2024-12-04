@@ -31,8 +31,9 @@ class attendance extends Controller
         $query = $req->input('query') ?? '';
 
         // get classes 
-        $resuest = Request::create(route('get.classes', $uid), 'POst');
+        $resuest = Request::create(route('get.classes', $uid), 'Post');
         $response = Route::dispatch($resuest);
+        // dd($response);
         $classes = json_decode($response->getContent(), true);
 
 
@@ -62,12 +63,18 @@ class attendance extends Controller
         // for pie chart
         $present = 0;
         $absent = 0;
+        $sus = 0;
+        $leave = 0;
 
         foreach ($attendance_whole as $data) {
             if ($data == 1) {
                 $present++;
             } else if ($data == 0) {
                 $absent++;
+            } else if ($data == 2) {
+                $sus++;
+            } else if ($data == 3) {
+                $leave++;
             }
         }
 
@@ -92,7 +99,7 @@ class attendance extends Controller
 
         $attendance = $c->paginate(10);
 
-        return view('attendance.class_attendance', compact('attendance', 'present', 'absent', 'class', 'class_id', 'user_role'));
+        return view('attendance.class_attendance', compact('attendance', 'leave', 'sus', 'present', 'absent', 'class', 'class_id', 'user_role'));
     }
 
     public function mark_absent(Request $req)
@@ -103,15 +110,52 @@ class attendance extends Controller
         ]);
 
         $ids = array();
-        foreach ($_POST['id_present'] as  $value) {
+        foreach ($_POST['id_present'] as $value) {
             array_push($ids, $value);
         }
 
         $str = '';
 
         foreach ($ids as $id) {
-            $str = $str . ',"$.' . $id . '",' . '0';
+            $str = $str . ',"$.\"' . $id . '\"",' . '0';
         }
+
+        echo '<pre>';
+        print_r($req->all());
+
+        DB::table('att_jsons')
+            ->where('class_id', $_POST['class_id'])
+            ->update([
+                'att_json' => DB::raw("JSON_SET(att_json" . $str . ")")
+            ]);
+
+        return redirect()->back();
+    }
+
+    public function mark_sus(Request $req)
+    {
+        // validate id the ids are empty
+        $req->validate([
+            'id_array' => 'required'
+        ]);
+
+        $ids = array();
+        foreach ($_POST['id_array'] as $value) {
+            array_push($ids, $value);
+        }
+
+        $str = '';
+
+        if (isset($_POST['absent'])) {
+            foreach ($ids as $id) {
+                $str = $str . ',"$.\"' . $id . '\"",' . '0';
+            }
+        } else {
+            foreach ($ids as $id) {
+                $str = $str . ',"$.\"' . $id . '\"",' . '1';
+            }
+        }
+
 
         echo '<pre>';
         print_r($req->all());
@@ -133,14 +177,14 @@ class attendance extends Controller
         ]);
 
         $ids = array();
-        foreach ($_POST['id_absent'] as  $value) {
+        foreach ($_POST['id_absent'] as $value) {
             array_push($ids, $value);
         }
 
         $str = '';
 
         foreach ($ids as $id) {
-            $str = $str . ',"$.' . $id . '",' . '1';
+            $str = $str . ',"$.\"' . $id . '\"",' . '1';
         }
 
         DB::table('att_jsons')
@@ -160,7 +204,7 @@ class attendance extends Controller
         ]);
 
         $ids = array();
-        foreach ($_POST['id_suspicious'] as  $value) {
+        foreach ($_POST['id_suspicious'] as $value) {
             array_push($ids, $value);
         }
 
@@ -172,7 +216,7 @@ class attendance extends Controller
             echo 'present';
 
             $ids = array();
-            foreach ($_POST['id_suspicious'] as  $value) {
+            foreach ($_POST['id_suspicious'] as $value) {
                 array_push($ids, $value);
             }
 
@@ -192,7 +236,7 @@ class attendance extends Controller
         } elseif ($req->input('absent')) {
 
             $ids = array();
-            foreach ($_POST['id_suspicious'] as  $value) {
+            foreach ($_POST['id_suspicious'] as $value) {
                 array_push($ids, $value);
             }
 
@@ -310,8 +354,8 @@ class attendance extends Controller
 
         // dump($subject);die;
 
-        if($subject['course_id'] == null){
-            return redirect()->route('admin.subject')->with('notification', ['danger','Subject not assigned to a course yet']);
+        if ($subject['course_id'] == null) {
+            return redirect()->route('admin.subject')->with('notification', ['danger', 'Subject not assigned to a course yet']);
         }
 
         $subject_details = subjects::join('courses', 'subjects.course_id', 'courses.course_id')
@@ -321,7 +365,7 @@ class attendance extends Controller
             ->where('subjects.subject_id', $subject_id)
             ->get(['subject_name', 'semester_name', 'course_name', 'teachers.teacher_name'])->toarray();
 
-        $total_classes = classes::where('subject_id', $subject_id)->count() ;
+        $total_classes = classes::where('subject_id', $subject_id)->count();
 
         $classes = classes::join('subjects', 'subjects.subject_id', 'classes.subject_id')->join('courses', 'courses.course_id', 'subjects.course_id')->join('semesters', 'semesters.semester_id', 'subjects.semester_id')->where('subjects.subject_id', $subject_id)->orderby('date', 'DESC')->limit(10)->get(['class_id', 'class_code', 'subject_name', 'semester_name', 'date'])->toarray();
 
@@ -345,7 +389,7 @@ class attendance extends Controller
         $avg = $a[0];
         $total_stu_str = $a[1];
 
-        return view('attendance.subject_attendance', compact('user_role', 'avg', 'subject_details', 'total_stu_str','total_classes', 'classes'));
+        return view('attendance.subject_attendance', compact('user_role', 'avg', 'subject_details', 'total_stu_str', 'total_classes', 'classes'));
     }
 
     public function student_index(Request $req)
@@ -367,6 +411,6 @@ class attendance extends Controller
         $c = new Collection($students);
         $students = $c->paginate(10);
 
-        return view('attendance.student', compact('user_role', 'uid', 'students' ,'query'));
+        return view('attendance.student', compact('user_role', 'uid', 'students', 'query'));
     }
 }

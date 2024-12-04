@@ -12,6 +12,7 @@ use App\Http\Controllers\apis\templates_api;
 use App\Http\Controllers\apis\dynamic_qr;
 use App\Http\Controllers\apis\teacher_api;
 use App\Models\dynamic_mapper;
+use App\Models\Sus;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,9 +28,8 @@ use App\Models\dynamic_mapper;
 Route::get('/clear_mapper/{code}', function ($code) {
 
     $result = dynamic_mapper::where('class_code', $code)->delete();
-    dump($result);
- 
- })->name('clear.mapper');
+    Sus::where('class_code', $code)->delete();
+})->name('clear.mapper');
 
 Route::any('/dynamic_qr/{class_code}', [dynamic_qr::class, 'dynamic_qr'])->name('dynamic_qr');
 
@@ -39,9 +39,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Teacher related
 
-Route::get('/get_teacher/{teacher_id?}',[teacher_api::class,'get_teachers'])->name('get.teacher');
+Route::get('/get_teacher/{teacher_id?}', [teacher_api::class, 'get_teachers'])->name('get.teacher');
 
-Route::any('/get_available_subjects/{flag}/{teacher_id?}', [teacher_api::class,'get_available_subjects'])->name('get.available.subjects');
+Route::any('/get_available_subjects/{flag}/{teacher_id?}', [teacher_api::class, 'get_available_subjects'])->name('get.available.subjects');
 
 // class related
 
@@ -53,7 +53,7 @@ Route::Post('/get_teacher_classes/{uid}', [classes_api::class, 'get_teacher_clas
 
 Route::Post('/get_students/{uid}', [student_api::class, 'get_students'])->name('get.students');
 
-Route::any('/get_student_by_id/{student_id?}',[student_api::class, 'get_student_by_id'])->name('get.student.id');
+Route::any('/get_student_by_id/{student_id?}', [student_api::class, 'get_student_by_id'])->name('get.student.id');
 
 // template related
 
@@ -73,6 +73,6 @@ Route::get('/get_subjects', [subjects_api::class, 'get_subjects'])->name('get.su
 
 Route::any('/get_all_subjects/{uid}', [subjects_api::class, 'get_all_subjects'])->name('get.all.subjects');
 
-Route::get('/get_available_subjects',[subjects_api::class,'get_available_subjects'])->name('get.subjects.plain');
+Route::get('/get_available_subjects', [subjects_api::class, 'get_available_subjects'])->name('get.subjects.plain');
 
-Route::any('/get_subject_by_id',[subjects_api::class,'get_subject_by_id'])->name('get.subjects.id');
+Route::any('/get_subject_by_id', [subjects_api::class, 'get_subject_by_id'])->name('get.subjects.id');
